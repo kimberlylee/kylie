@@ -1,14 +1,14 @@
 # Kylie - Real User Monitoring Plugin for Websites. #
 
-*   Copyright (c) 2011, Yahoo! Inc. All rights reserved.
-*   Some code Copyright (c) 2012, Log-Normal Inc. All rights reserved.
-*   Some code Copyright (c) 2013, Salesforce.com. All rights reserved.
+* Copyright (c) 2011, Yahoo! Inc. All rights reserved.
+* Some code Copyright (c) 2012, Log-Normal Inc. All rights reserved.
+* Some code Copyright (c) 2013, Salesforce.com. All rights reserved.
 
 Copyrights licensed under the BSD License. See the accompanying LICENSE.txt file for terms.
 
 Kylie - [an Australian boomerang; one side flat and the other convex](http://wordnetweb.princeton.edu/perl/webwn?s=kylie)
 
-<div class="vcard">forked by <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/kpolavarapu">Kiran Polavarapu</a> and <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/eperret">Eric Perret</a></div>
+<div itemscope>forked by <a itemprop="name" rel="author" href="https://github.com/kpolavarapu">Kiran Polavarapu</a> and <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/eperret">Eric Perret</a></div>
 
 ## Summary ##
 
