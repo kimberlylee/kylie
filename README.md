@@ -8,7 +8,7 @@ Copyrights licensed under the BSD License. See the accompanying LICENSE.txt file
 
 Kylie - [an Australian boomerang; one side flat and the other convex](http://wordnetweb.princeton.edu/perl/webwn?s=kylie)
 
-<div style="color:#333;padding-left:1em;font-style:italic">forked by <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/kpolavarapu">Kiran Polavarapu</a> and <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/eperret">Eric Perret</a></div>
+<div class="vcard">forked by <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/kpolavarapu">Kiran Polavarapu</a> and <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/eperret">Eric Perret</a></div>
 
 ## Summary ##
 
