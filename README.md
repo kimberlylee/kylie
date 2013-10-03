@@ -1,131 +1,70 @@
-Copyright (c) 2011, Yahoo! Inc.  All rights reserved.
-Some code Copyright (c) 2012, Log-Normal Inc.  All rights reserved.
+# Kylie - Real User Monitoring Plugin for Websites. #
+
+Copyright (c) 2011, Yahoo! Inc. All rights reserved. Some code Copyright (c) 2012, Log-Normal Inc. All rights reserved. Some code Copyright (c) 2013, Salesforce.com. All rights reserved.
 
 Copyrights licensed under the BSD License. See the accompanying LICENSE.txt file for terms.
 
 boomerang always comes back, except when it hits something.
 
-summary
----
+Kylie - [an Australian boomerang; one side flat and the other convex](http://wordnetweb.princeton.edu/perl/webwn?s=kylie)
 
-boomerang is a JavaScript library that measures the page load time experienced by real users, commonly called RUM.
+## Summary ##
 
-Apart from page load time, boomerang measures a whole bunch of performance characteristics of your user's web browsing experience.  All you have to do is stick it into your web pages and call the
-init() method.
+Kylie is a piece of JavaScript that is embedded in a webpage to monitor how long it takes for users to load the page. This is also commonly referred to as [RUM](https://en.wikipedia.org/wiki/Real_user_monitoring). Kylie is also a fork of [boomerang](https://github.com/lognormal/boomerang) that is designed to reduce the [observer effect](https://en.wikipedia.org/wiki/Observer_effect_\(physics\)) and add new features.
 
-usage
----
+Apart from page load time, Kylie measures a whole bunch of performance characteristics of your user's web browsing experience. All you have to do is stick it into your web pages and call the `onLoad()` method at the very end of the page load.
 
-The simple synchronous way to include boomerang on your page:
-```html
-<script src="http://your-cdn.host.com/path/to/boomerang-version.js"></script>
-<script>
-   BOOMR.init();
-</script>
-```
+## Usage ##
 
-The faster, more involved, asynchronous way (and what I do for sites I control):
+The simple synchronous way to include Kylie on your page...
 
-### 1. Add a plugin to init your code
+    <script src="http://your-cdn.host.com/path/to/perf.js"></script>
+    ...
+    <body onload="perf.onLoad()">
 
-Create a plugin (call it zzz_init.js or whatever you like) with your init code in there:
-```javascript
-BOOMR.init({
-	config: parameters,
-	...
-});
-```
-You could also include any other code you need.  For example, I include a timer to measure when boomerang has finished loading.
+This does not work asynchronously. Based on the way that it is setup it needs to call `perf.onLoad()` explicitly because most complex sites do not have a standard measure to say that the page is fully loaded.
 
-I call my plugin `zzz_init.js` to remind me to include it last in the plugin list
+Kylie can also capture the client-side time on the browser for a page. To accurately facilitate this you need to include a reference time at the top of the page `var perfOptions={pageStartTime:new Date()};`.
 
-### 2. Build boomerang using this plugin as the last one
+    <script>var perfOptions={pageStartTime:new Date()};</script>
+    <script src="http://your-cdn.host.com/path/to/perf.js"></script>
+    ...
+    <body onload="perf.onLoad()">
 
-```bash
-make PLUGINS="list.js of.js plugins.js zzz_init.js" MINIFIER="/path/to/your/js-minifier"
-```
+If `pageStartTime` is not included on the page then a `new Date()` is instantiated after downloading/parsing perf.js and is used in it's place.
 
-This should create `boomerang-<version>.js`
+### Adding Custom Measurements ##
 
-Install this file on your web server or origin server where your CDN can pick it up.  Set a far future max-age header for it.  This file will never change.
+Kylie can be used to measure the time it takes to load specific parts of a web page.  It is as simple as calling `perf.mark("UNIQUE_NAME")` to start the timer and `perf.endMark("UNIQUE_NAME")` to end the timer. This will capture the elapsed time of the instrumented code and a reference time that can be used to order it within the other metrics.
 
-### 3. Asynchronously include the script on your page
+#### Simple Example ####
 
-#### 3.1. Adding it to the main document
-Include the following code at the *top* of your HTML document:
-```html
-<script>
-(function(d, s) {
-   var js = d.createElement(s),
-       sc = d.getElementsByTagName(s)[0];
+    <script>
+    perf.mark("ConsoleLog");
+    console.log("Number of DOM elements: " + document.getElementsByTagName("*").length);
+    perf.endMark("ConsoleLog");
+    </script>
 
-   js.src="http://your-cdn.host.com/path/to/boomerang-<version>.js";
-   sc.parentNode.insertBefore(js, sc);
-}(document, "script"));
-</script>
-```
+### Accessing Metrics ###
 
-Yes, the best practices say to include scripts at the bottom.  That's different.  That's for scripts that block downloading of other resources.  Including a script this
-way will not block other resources, however it _will_ block <code>onload</code>.  Including the script at the top of your page gives it a good chance of loading
-before the rest of your page does thereby reducing the probability of it blocking the `onload` event.  If you don't want to block `onload` either, follow Stoyan's
-<a href="http://www.phpied.com/non-onload-blocking-async-js/">advice from the Meebo team</a>.
+If the beacon URL is set then the data can be read in JSON format from the server. Inside the boomerang.js file the URL to report the captured measurements is set in the `beacon_url` url parameter.
 
-#### 3.2. Adding it via an iframe
+From the browser console or JavaScript you can access the parameters uisng `perf.toJson()`.
 
-The method described in 3.1 will still block `onload` on most browsers (Internet Explorer not included).  To avoid
-blocking `onload`, we could load boomerang in an iframe.  Stoyan's <a href="http://www.phpied.com/non-onload-blocking-async-js/">documented
-the technique on his blog</a>.  We've modified it to work across browsers with different configurations, documented on
-<a href="http://www.lognormal.com/blog/2012/12/12/the-script-loader-pattern/">the lognormal blog</a>.
+## What makes this Fork better than any other implementation of Boomerang? ##
 
-For boomerang, this is the code you'll include:
+### Smaller in size ###
 
-```html
-<script>
-(function(){
-  var dom,doc,where,iframe = document.createElement('iframe');
-  iframe.src = "javascript:false";
-  (iframe.frameElement || iframe).style.cssText = "width: 0; height: 0; border: 0";
-  var where = document.getElementsByTagName('script')[0];
-  where.parentNode.insertBefore(iframe, where);
+The code is smaller size and will download and parse faster. It was re-coded to work completely with Google's [Closure Compiler](https://developers.google.com/closure/compiler/) (in advanced mode). This means that the overhead that this library will have is less. The number of required global variables have be reduce to 2, which reduces the negative impact on overall performance and namespace clobbering.
 
-  try {
-    doc = iframe.contentWindow.document;
-  } catch(e) {
-    dom = document.domain;
-    iframe.src="javascript:var d=document.open();d.domain='"+dom+"';void(0);";
-    doc = iframe.contentWindow.document;
-  }
-  doc.open()._l = function() {
-    var js = this.createElement("script");
-    if(dom) this.domain = dom;
-    js.id = "js-iframe-async";
-    js.src = 'http://your-cdn.host.com/path/to/boomerang-<version>.js';
-    this.body.appendChild(js);
-  };
-  doc.write('<body onload="document._l();">');
-  doc.close();
-})();
-</script>
-```
-The `id` of the script node created by this code MUST be `boomr-if-as` as boomerang looks for that id to determine if it's running within an iframe or not.
+### Faster Code ###
 
-Boomerang will still export the `BOOMR` object to the parent window if running inside an iframe, so the rest of your code should remain unchanged.
+The code was also re-designed to use `"use strict";` and be compatible with it. This improves the performance of the code and reduces the chances of having hidden errors. See [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/Strict_mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/Strict_mode) for more info on Strict Mode.
 
-docs
----
-Documentation is in the docs/ sub directory, and is written in HTML.  Your best bet is to check it out and view it locally, though it works best through a web server (you'll need cookies).
-Thanks to github's awesome `gh-pages` feature, we're able to host the boomerang docs right here on github.  Visit http://lognormal.github.com/boomerang/doc/ for a browsable version where all
-the examples work.
+## Support ##
 
-In case you're browsing this elsewhere, the latest development version of the code and docs are available at https://github.com/bluesmoon/boomerang/, while the latest stable version is
-at https://github.com/lognormal/boomerang/
+All support, questions, bug fixing, is done via our github repository at [https://github.com/forcedotcom/boomerang](https://github.com/forcedotcom/boomerang). You'll need a github account to participate, but then you'll need one to check out the code as well :)
 
-support
----
-We use github issues for discussions, feature requests and bug reports.  Get in touch at https://github.com/lognormal/boomerang/issues
-You'll need a github account to participate, but then you'll need one to check out the code as well :)
+I would like to thank you for taking a look at Kylie.  Please leave us a message telling us if you use our version.
 
-Thanks for dropping by, and please leave us a message telling us if you use boomerang.
-
-boomerang is supported by the devs at <a href="http://www.lognormal.com/">LogNormal</a>, and the awesome community of opensource developers that use
-and hack it.  That's you.  Thank you!
+Kylie is supported by the Perf Eng team at Salesforce.com, and the community of opensource developers / DevOps / Perforce engineers who use and hack it.

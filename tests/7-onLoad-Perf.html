@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Onload: Perf</title></head>
+<body onload="Perf.onLoad()">
+This page should load without javascript errors.<br>
+This page calls init() with no parameters, so onload should fire and try to measure page performance.<br>
+Status: <span id="state" style="background-color:green;">PASS</span>
+<script>
+window.onerror = function() {
+	var st = document.getElementById("state");
+	st.style.backgroundColor="red";
+	st.innerHTML = "FAIL";
+}
+</script>
+<script src="../perf.js"></script>
+</body>
+</html>
+<!--
+    Copyright (c) 2013, Salesforce.com. All rights reserved.
+    Copyrights licensed under the BSD License. See the accompanying LICENSE.txt file for terms.
+-->
