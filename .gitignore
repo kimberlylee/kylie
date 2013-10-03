@@ -1,3 +1,5 @@
 .gitignore
 *.gz
-boomerang-*.js
+perf-*.js
+perf-*.map
+perfStub-*.js

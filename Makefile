@@ -37,7 +37,7 @@ perf-$(VERSION).$(DATE).js: perf-$(VERSION).$(DATE)-debug.js
 	echo "Making $@ ..."
 	echo "using plugins: $(PLUGINS)..."
 	echo "using shim: $(SHIM)..."
-	$(MINIFIER)src/boomerangClousreCompilerTypes.js src/boomerang.js $(PLUGINS) $(SHIM) --js_output_file=perf.js
+	$(MINIFIER)src/boomerangClousreCompilerTypes.js src/boomerang.js $(PLUGINS) $(SHIM) --js_output_file=$@
 	echo "done"
 	echo
 	

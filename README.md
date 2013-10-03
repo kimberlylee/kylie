@@ -1,12 +1,14 @@
 # Kylie - Real User Monitoring Plugin for Websites. #
 
-Copyright (c) 2011, Yahoo! Inc. All rights reserved. Some code Copyright (c) 2012, Log-Normal Inc. All rights reserved. Some code Copyright (c) 2013, Salesforce.com. All rights reserved.
+*   Copyright (c) 2011, Yahoo! Inc. All rights reserved.
+*   Some code Copyright (c) 2012, Log-Normal Inc. All rights reserved.
+*   Some code Copyright (c) 2013, Salesforce.com. All rights reserved.
 
 Copyrights licensed under the BSD License. See the accompanying LICENSE.txt file for terms.
 
-boomerang always comes back, except when it hits something.
-
 Kylie - [an Australian boomerang; one side flat and the other convex](http://wordnetweb.princeton.edu/perl/webwn?s=kylie)
+
+<div style="color:#333;padding-left:1em;font-style:italic">forked by <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/kpolavarapu">Kiran Polavarapu</a> and <a itemprop="name" itemscope="itemscope" itemtype="http://schema.org/Person" rel="author" href="https://github.com/eperret">Eric Perret</a></div>
 
 ## Summary ##
 
@@ -35,23 +37,31 @@ If `pageStartTime` is not included on the page then a `new Date()` is instantiat
 
 ### Adding Custom Measurements ##
 
-Kylie can be used to measure the time it takes to load specific parts of a web page.  It is as simple as calling `perf.mark("UNIQUE_NAME")` to start the timer and `perf.endMark("UNIQUE_NAME")` to end the timer. This will capture the elapsed time of the instrumented code and a reference time that can be used to order it within the other metrics.
+Kylie can be used to measure the time it takes to load specific parts of a web page.  It is as simple as calling `perf.mark("Twain")` to start the timer and `perf.endMark("Twain")` to end the timer. This will capture the elapsed time of the instrumented code and a reference time that can be used to order it within the other metrics. All of this will be reported under the mark name "Twain".
 
 #### Simple Example ####
 
     <script>
-    perf.mark("ConsoleLog");
+    perf.mark("Twain");
     console.log("Number of DOM elements: " + document.getElementsByTagName("*").length);
-    perf.endMark("ConsoleLog");
+    perf.endMark("Twain");
     </script>
 
 ### Accessing Metrics ###
 
 If the beacon URL is set then the data can be read in JSON format from the server. Inside the boomerang.js file the URL to report the captured measurements is set in the `beacon_url` url parameter.
 
-From the browser console or JavaScript you can access the parameters uisng `perf.toJson()`.
+From the browser console or JavaScript you can access the parameters using `perf.toJson()`.
 
-## What makes this Fork better than any other implementation of Boomerang? ##
+## What makes this fork better than any other implementation of Boomerang? ##
+
+### Transaction support ###
+
+Transaction support can be implemented by calling `Perf.startTransaction(transactionName)` and `Perf.endTransaction(transactionName)`. This is particularly useful in single page load followed by multiple subsequent user actions. For example, a transaction can be started on every click event and ended when the activity triggered by the ‘click’ finishes. There will be a metric `txn_[transactionName]` recorded for every such click event.
+
+### Session support ###
+
+session ID (`sessionID`), session Length (`rt.sl`) and session start (`rt.ss`) are included in the beacon. These can be used to track the session in the case of single page load and multiple actions scenario.
 
 ### Smaller in size ###
 
@@ -63,8 +73,8 @@ The code was also re-designed to use `"use strict";` and be compatible with it. 
 
 ## Support ##
 
-All support, questions, bug fixing, is done via our github repository at [https://github.com/forcedotcom/boomerang](https://github.com/forcedotcom/boomerang). You'll need a github account to participate, but then you'll need one to check out the code as well :)
+All support, questions, bug fixing, is done via our github repository at <https://github.com/forcedotcom/boomerang/issues>. You'll need a github account to participate, but then you'll need one to check out the code as well :-)
 
 I would like to thank you for taking a look at Kylie.  Please leave us a message telling us if you use our version.
 
-Kylie is supported by the Perf Eng team at Salesforce.com, and the community of opensource developers / DevOps / Perforce engineers who use and hack it.
+Kylie is supported by the [Perf Eng team at Salesforce.com](http://www.salesforce.com/company/careers/technology/perfengineering.jsp), and the community of opensource developers / DevOps / Perforce engineers who use and hack it.
