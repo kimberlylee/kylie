@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2011, Yahoo! Inc.  All rights reserved.
+ * Copyright (c) 2012, Log-Normal, Inc.  All rights reserved.
+ * Copyright (c) 2013, Salesforce.com  All rights reserved.
+ * Copyrights licensed under the BSD License. See the accompanying LICENSE.txt file for terms.
+ */
 //This is the Round Trip Time plugin. Abbreviated to RT
 //the parameter is the window
 /**
