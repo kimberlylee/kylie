@@ -1,3 +1,4 @@
+/*jshint expr:true*/
 /** This file is used for the closure compiler in advanced mode to define custom data types and allows for better minification and type checking */
 
 /**

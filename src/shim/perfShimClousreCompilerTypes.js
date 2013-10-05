@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2013, Salesforce.com. All rights reserved.
+ * Copyrights licensed under the BSD License. See the accompanying LICENSE.txt file for terms.
+ */
+
+/*jshint expr:true*/
+
 /** This file is used for the closure compiler in advanced mode to define custom data types and allows for better minification and type checking */
 
 /** @typedef {{name: !string, value: !number}} */
@@ -7,46 +14,9 @@ window.typePerfLogLevel;
 window.typejsonMeasure;
 
 /**
- * The interface used to stub out some of the IPerf functions. Used when Kylie
- * is not enabled.
- *
- * @interface
- */
-function IPerfStubs() {}
-/**
- * @param {!string} id The id used to identify the mark.
- * @param {window.typePerfLogLevel=} logLevel The level at which this mark should
- * be logged at.
- * @return {!IPerf}
- */
-IPerfStubs.prototype.mark;
-/**
- * @param {!string} id This is the id associated with the mark that uses
- * the same id.
- * @param {window.typePerfLogLevel=} logLevel The level at which this mark should
- * be logged at.
- * @return {!IPerf}
- */
-IPerfStubs.prototype.endMark;
-/**
- * Add a performance measurement from the server.
- * @param {!string} label
- * @param {!number} elapsedMillis
- */
-IPerfStubs.prototype.stat;
-/**
- * @param {?string} measureName Not used.
- * @param {!string} id This is the id associated with the mark that uses the same id.
- * @param {window.typePerfLogLevel=} logLevel The level at which this mark should be logged at.
- * @deprecated Use endMark instead
- */
-IPerfStubs.prototype.measure;
-
-/**
  * The interface used with the Perf object.
  *
  * @interface
- * @extends IPerfStubs
  */
 function IPerf() {}
 
@@ -68,6 +38,27 @@ IPerf.prototype.mark;
  */
 IPerf.prototype.endMark;
 /**
+ * This method is used to the update the name of a mark
+ *
+ * @param {!string} oldName The id used to identify the old mark name.
+ * @param {!string} newName The id used to identify the new mark name.
+ * @return {!IPerf} for chaining methods
+ * @expose
+ */
+IPerf.prototype.updateMarkName;
+/**
+ * Serializes a measure object to JSON.
+ * @param {!window.typejsonMeasure} measure The measure to serialize.
+ * @return {!string} JSON-serialized version of the supplied marks.
+ */
+IPerf.prototype.measureToJson;
+/**
+ * Serializes timers to JSON.
+ * @param {boolean=} includeMarks
+ * @return {!string} JSON-serialized version of marks.
+ */
+IPerf.prototype.toJson;
+/**
  * @param {!string} timer_name The name of the timer to set.
  * @param {!number} timer_delta The delta of timestamps to set.
  * @param {string|window.typePerfLogLevel=} logLevel The level at which this mark should be logged at. Defaults to PerfLogLevel.INTERNAL if left blank
@@ -75,30 +66,21 @@ IPerf.prototype.endMark;
  */
 IPerf.prototype.setTimer;
 /**
- * Serializes a measure object to JSON.
- * @param {!window.typejsonMeasure} measure The measure to serialize.
- * @return {!string} JSON-serialized version of the supplied measure.
- */
-IPerf.prototype.measureToJson;
-/**
- * Serializes timers to JSON.
- * @param {boolean=} includeMarks
- * @return {!string} JSON-serialized version of timers.
- */
-IPerf.prototype.toJson;
-/**
  * Get a JSON-serialized version of all existing timers and stats in POST friendly format.
+ * 
  * @return {!string} POST-friendly timers and stats.
  */
 IPerf.prototype.toPostVar;
 /**
+ * Returns all of the measures that have been captured
+ * 
  * @return {!Array.<!window.typejsonMeasure>} all existing measures.
  */
 IPerf.prototype.getMeasures;
 /**
  * Returns the beaconData to piggyback on the next XHR call
  * 
- * @return {!string} beacon data.
+ * @return {?string} beacon data.
  */
 IPerf.prototype.getBeaconData;
 /**
@@ -114,26 +96,14 @@ IPerf.prototype.setBeaconData;
  */
 IPerf.prototype.clearBeaconData;
 /**
- * @param {!string} tName The id used to identify the transaction.
- * @return {!IPerf} for chaining methods
- * @override
+ * Removes stats.
+ * 
+ * @type {function()}
  */
-IPerf.prototype.startTransaction;
-/**
- * @param {!string} tName The id used to identify the transaction.
- * @return {!IPerf} for chaining methods
- * @override
- */
-IPerf.prototype.endTransaction;
-/**
- * @param {!string} oldName The id used to identify the old transaction name.
- * @param {!string} newName The id used to identify the new transaction name.
- * @return {!IPerf}
- * @override
- */
-IPerf.prototype.updateTransaction;
+IPerf.prototype.removeStats;
 /**
  * Add a performance measurement from the server.
+ * 
  * @param {!string} label
  * @param {!number} elapsedMillis
  * @return {!IPerf}
@@ -148,11 +118,33 @@ IPerf.prototype.stat;
  */
 IPerf.prototype.getStat;
 /**
- * Removes stats.
+ * Called when the page is ready to interact with. To support the existing Kylie.onLoad method.
  * 
  * @type {function()}
  */
-IPerf.prototype.removeStats;
+IPerf.prototype.onLoad;
+/**
+ * This method is used to mark the start of a transaction
+ * 
+ * @param {!string} tName The id used to identify the transaction.
+ * @return {!IPerf} for chaining methods
+ */
+IPerf.prototype.startTransaction;
+/**
+ * This method is used to mark the end of a transaction
+ * 
+ * @param {!string} tName The id used to identify the transaction.
+ * @return {!IPerf} for chaining methods
+ */
+IPerf.prototype.endTransaction;
+/**
+ * This method is used to the update the name of the transaction
+ * 
+ * @param {!string} oldName The id used to identify the old transaction name.
+ * @param {!string} newName The id used to identify the new transaction name.
+ * @return {!IPerf}
+ */
+IPerf.prototype.updateTransaction;
 /**
  * @param {?string} measureName Not used.
  * @param {!string} id This is the id associated with the mark that uses the same id.
@@ -162,3 +154,33 @@ IPerf.prototype.removeStats;
  * @override
  */
 IPerf.prototype.measure;
+
+/**
+ * Whether the full Kylie framework is loaded, as opposed to just the stubs.
+ * 
+ * @type {boolean}
+ * @const
+ */
+IPerf.prototype.enabled;
+
+/**
+ * @interface
+ */
+function IPerf_util() {}
+
+/**
+ * Utility functions
+ * 
+ * @type {IPerf_util}
+ */
+IPerf.prototype.utils;
+
+/**
+ * Sets the roundtrip time cookie
+ *
+ * @param {!string} name
+ * @param {!string|number} value
+ * @param {Date} expires
+ * @param {string} path
+ */
+IPerf_util.prototype.setCookie;

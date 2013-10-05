@@ -1,3 +1,5 @@
+/*jshint sub:true*/
+
 /**
  * \file mobile.js
  * Plugin to capture navigator.connection.type on browsers that support it
