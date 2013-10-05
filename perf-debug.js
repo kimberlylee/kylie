@@ -29,7 +29,6 @@ IBOOMR_utils.prototype.removeCookie;
 IBOOMR_utils.prototype.pluginConfig;
 IBOOMR_utils.prototype.getSubCookies;
 /*
-
  Copyright (c) 2011, Yahoo! Inc.  All rights reserved.
  Copyright (c) 2012, Log-Normal, Inc.  All rights reserved.
  Copyright (c) 2013, SOASTA, Inc. All rights reserved.
@@ -43,8 +42,8 @@ function run(w) {
   if(w.parent !== w && (document.getElementById("boomr-if-as") && document.getElementById("boomr-if-as").nodeName.toLowerCase() === "script")) {
     w = w.parent
   }
-  var k;
   var d = w.document;
+  var k;
   var perfOptions = w["perfOptions"] || {};
   BOOMR = w.BOOMR === undefined ? {} : w.BOOMR;
   if(BOOMR.version) {
@@ -84,16 +83,16 @@ function run(w) {
     return true
   }};
   var boomr = {t_lstart:undefined, t_start:BOOMR_start, t_end:null, utils:{objectToString:function(o, separator) {
-    var value = [], k;
+    var value = [], l;
     if(!o || typeof o !== "object") {
       return o
     }
     if(separator === undefined) {
       separator = "\n\t"
     }
-    for(k in o) {
-      if(Object.prototype.hasOwnProperty.call(o, k)) {
-        value.push(encodeURIComponent(k) + "=" + encodeURIComponent(o[k]))
+    for(l in o) {
+      if(Object.prototype.hasOwnProperty.call(o, l)) {
+        value.push(encodeURIComponent(l) + "=" + encodeURIComponent(o[l]))
       }
     }
     return value.join(separator)
@@ -171,7 +170,7 @@ function run(w) {
       el.detachEvent("on" + type, fn)
     }
   }}, init:function(config) {
-    var i, k, properties = ["beacon_url", "site_domain", "user_ip"];
+    var i, l, properties = ["beacon_url", "site_domain", "user_ip"];
     if(!config) {
       config = {}
     }
@@ -184,21 +183,20 @@ function run(w) {
       BOOMR.log = config.log
     }
     if(!BOOMR.log) {
-      BOOMR.log = function() {
+      BOOMR.log = function(m, l, s) {
       }
     }
-    for(k in BOOMR.plugins) {
-      if(BOOMR.plugins.hasOwnProperty(k)) {
-        if(config[k] && (config[k].hasOwnProperty("enabled") && config[k].enabled === false)) {
-          impl.disabled_plugins[k] = 1;
+    for(l in BOOMR.plugins) {
+      if(BOOMR.plugins.hasOwnProperty(l)) {
+        if(config[l] && (config[l].hasOwnProperty("enabled") && config[l].enabled === false)) {
+          impl.disabled_plugins[l] = 1;
           continue
-        }else {
-          if(impl.disabled_plugins[k]) {
-            delete impl.disabled_plugins[k]
-          }
         }
-        if(typeof BOOMR.plugins[k].init === "function") {
-          BOOMR.plugins[k].init(config)
+        if(impl.disabled_plugins[l]) {
+          delete impl.disabled_plugins[l]
+        }
+        if(typeof BOOMR.plugins[l].init === "function") {
+          BOOMR.plugins[l].init(config)
         }
       }
     }
@@ -223,10 +221,10 @@ function run(w) {
       var fire_visible = function() {
         impl.fireEvent("visibility_changed")
       };
-      if(d.webkitVisibilityState) {
+      if(d["webkitVisibilityState"]) {
         boomr.utils.addListener(d, "webkitvisibilitychange", fire_visible)
       }else {
-        if(d.msVisibilityState) {
+        if(d["msVisibilityState"]) {
           boomr.utils.addListener(d, "msvisibilitychange", fire_visible)
         }else {
           if(d.visibilityState) {
@@ -258,14 +256,14 @@ function run(w) {
     if(w.setImmediate) {
       w.setImmediate(cb)
     }else {
-      if(w.msSetImmediate) {
-        w.msSetImmediate(cb)
+      if(w["msSetImmediate"]) {
+        w["msSetImmediate"](cb)
       }else {
-        if(w.webkitSetImmediate) {
-          w.webkitSetImmediate(cb)
+        if(w["webkitSetImmediate"]) {
+          w["webkitSetImmediate"](cb)
         }else {
-          if(w.mozSetImmediate) {
-            w.mozSetImmediate(cb)
+          if(w["mozSetImmediate"]) {
+            w["mozSetImmediate"](cb)
           }else {
             setTimeout(cb, 10)
           }
@@ -307,10 +305,10 @@ function run(w) {
       impl.vars[name] = value
     }else {
       if(typeof name === "object") {
-        var o = name, k;
-        for(k in o) {
-          if(o.hasOwnProperty(k)) {
-            impl.vars[k] = o[k]
+        var o = name, l;
+        for(l in o) {
+          if(o.hasOwnProperty(l)) {
+            impl.vars[l] = o[l]
           }
         }
       }
@@ -341,13 +339,13 @@ function run(w) {
     BOOMR.plugins["RT"]["clearTimers"]();
     return BOOMR
   }, sendBeacon:function() {
-    var k, url, img, nparams = 0;
-    for(k in BOOMR.plugins) {
-      if(BOOMR.plugins.hasOwnProperty(k)) {
-        if(impl.disabled_plugins[k]) {
+    var l, url, img, nparams = 0;
+    for(l in BOOMR.plugins) {
+      if(BOOMR.plugins.hasOwnProperty(l)) {
+        if(impl.disabled_plugins[l]) {
           continue
         }
-        if(!BOOMR.plugins[k].is_complete()) {
+        if(!BOOMR.plugins[l].is_complete()) {
           return BOOMR
         }
       }
@@ -362,10 +360,10 @@ function run(w) {
       return BOOMR
     }
     url = [];
-    for(k in impl.vars) {
-      if(impl.vars["hasOwnProperty"](k)) {
+    for(l in impl.vars) {
+      if(impl.vars["hasOwnProperty"](l)) {
         nparams++;
-        url.push(encodeURIComponent(k) + "=" + (impl.vars[k] === undefined || impl.vars[k] === null ? "" : encodeURIComponent(impl.vars[k] + "")))
+        url.push(encodeURIComponent(l) + "=" + (impl.vars[l] === undefined || impl.vars[l] === null ? "" : encodeURIComponent(impl.vars[l] + "")))
       }
     }
     url = impl.beacon_url + (impl.beacon_url.indexOf("?") > -1 ? "&" : "?") + url.join("&");
@@ -492,7 +490,7 @@ function runrt(w) {
       impl.sessionLength = parseInt(subcookies.sl, 10)
     }
   }, checkPreRender:function() {
-    if(!(d.webkitVisibilityState && d.webkitVisibilityState === "prerender") && !(d.msVisibilityState && d.msVisibilityState === 3)) {
+    if(!(d["webkitVisibilityState"] && d["webkitVisibilityState"] === "prerender") && !(d["msVisibilityState"] && d["msVisibilityState"] === 3)) {
       return false
     }
     BOOMR.plugins.RT.startTimer("t_load", impl.navigationStart);
@@ -642,11 +640,11 @@ function runrt(w) {
     return impl.sessionID
   }, getSessionStart:function() {
     return impl.sessionStart
-  }, onLoadFired:function() {
+  }, isOnLoadFired:function() {
     return impl.onloadfired
   }, done:function() {
     BOOMR.debug("Called done", "rt");
-    var t_start, t_done = (new Date).getTime(), basic_timers = {"t_done":1, "t_resp":1, "t_page":1, "t_domloaded":1, "t_onLoad":1, "PageStart":1, "pagePerceived":1}, ntimers = 0, t_name, timer, t_other = [];
+    var t_start, t_done = (new Date).getTime(), ntimers = 0, t_name, timer, t_other = [];
     impl.complete = false;
     impl.initFromCookie();
     impl.initNavTiming();
@@ -741,410 +739,6 @@ function runrt(w) {
   }}
 }
 runrt(window);
-function bwrun() {
-  BOOMR = BOOMR || {};
-  BOOMR.plugins = BOOMR.plugins || {};
-  var images = [{name:"image-0.png", size:11483, timeout:1400}, {name:"image-1.png", size:40658, timeout:1200}, {name:"image-2.png", size:164897, timeout:1300}, {name:"image-3.png", size:381756, timeout:1500}, {name:"image-4.png", size:1234664, timeout:1200}, {name:"image-5.png", size:4509613, timeout:1200}, {name:"image-6.png", size:9084559, timeout:1200}];
-  images.end = images.length;
-  images.start = 0;
-  images.l = {name:"image-l.gif", size:35, timeout:1E3};
-  var impl = {base_url:"", timeout:15E3, nruns:5, latency_runs:10, user_ip:"", cookie_exp:7 * 86400, cookie:"BA", results:[], latencies:[], latency:null, runs_left:0, aborted:false, complete:true, running:false, initialized:false, ncmp:function(a, b) {
-    return a - b
-  }, iqr:function(a) {
-    var l = a.length - 1, q1, q3, fw, b = [], i;
-    q1 = (a[Math.floor(l * 0.25)] + a[Math.ceil(l * 0.25)]) / 2;
-    q3 = (a[Math.floor(l * 0.75)] + a[Math.ceil(l * 0.75)]) / 2;
-    fw = (q3 - q1) * 1.5;
-    l++;
-    for(i = 0;i < l && a[i] < q3 + fw;i++) {
-      if(a[i] > q1 - fw) {
-        b.push(a[i])
-      }
-    }
-    return b
-  }, calc_latency:function() {
-    var i, n, sum = 0, sumsq = 0, amean, median, std_dev, std_err, lat_filtered, first;
-    first = impl.latencies.shift();
-    lat_filtered = impl.iqr(impl.latencies.sort(impl.ncmp));
-    n = lat_filtered.length;
-    BOOMR.debug(lat_filtered, "bw");
-    for(i = 0;i < n;i++) {
-      sum += lat_filtered[i];
-      sumsq += lat_filtered[i] * lat_filtered[i]
-    }
-    amean = Math.round(sum / n);
-    std_dev = Math.sqrt(sumsq / n - sum * sum / (n * n));
-    std_err = (1.96 * std_dev / Math.sqrt(n)).toFixed(2);
-    std_dev = std_dev.toFixed(2);
-    median = Math.round((lat_filtered[Math.floor(n / 2)] + lat_filtered[Math.ceil(n / 2)]) / 2);
-    return{mean:amean, median:median, stddev:std_dev, stderr:std_err}
-  }, calc_bw:function() {
-    var i, j, n = 0, r, bandwidths = [], bandwidths_corrected = [], sum = 0, sumsq = 0, sum_corrected = 0, sumsq_corrected = 0, amean, std_dev, std_err, median, amean_corrected, std_dev_corrected, std_err_corrected, median_corrected, nimgs, bw, bw_c, debug_info = [];
-    for(i = 0;i < impl.nruns;i++) {
-      if(!impl.results[i] || !impl.results[i].r) {
-        continue
-      }
-      r = impl.results[i].r;
-      nimgs = 0;
-      for(j = r.length - 1;j >= 0 && nimgs < 3;j--) {
-        if(!r[j]) {
-          break
-        }
-        if(r[j].t === null) {
-          continue
-        }
-        n++;
-        nimgs++;
-        bw = images[j].size * 1E3 / r[j].t;
-        bandwidths.push(bw);
-        bw_c = images[j].size * 1E3 / (r[j].t - impl.latency.mean);
-        bandwidths_corrected.push(bw_c);
-        if(r[j].t < impl.latency.mean) {
-          debug_info.push(j + "_" + r[j].t)
-        }
-      }
-    }
-    BOOMR.debug("got " + n + " readings", "bw");
-    BOOMR.debug("bandwidths: " + bandwidths, "bw");
-    BOOMR.debug("corrected: " + bandwidths_corrected, "bw");
-    if(bandwidths.length > 3) {
-      bandwidths = impl.iqr(bandwidths.sort(impl.ncmp));
-      bandwidths_corrected = impl.iqr(bandwidths_corrected.sort(impl.ncmp))
-    }else {
-      bandwidths = bandwidths.sort(impl.ncmp);
-      bandwidths_corrected = bandwidths_corrected.sort(impl.ncmp)
-    }
-    BOOMR.debug("after iqr: " + bandwidths, "bw");
-    BOOMR.debug("corrected: " + bandwidths_corrected, "bw");
-    n = Math.max(bandwidths.length, bandwidths_corrected.length);
-    for(i = 0;i < n;i++) {
-      if(i < bandwidths.length) {
-        sum += bandwidths[i];
-        sumsq += Math.pow(bandwidths[i], 2)
-      }
-      if(i < bandwidths_corrected.length) {
-        sum_corrected += bandwidths_corrected[i];
-        sumsq_corrected += Math.pow(bandwidths_corrected[i], 2)
-      }
-    }
-    n = bandwidths.length;
-    amean = Math.round(sum / n);
-    std_dev = Math.sqrt(sumsq / n - Math.pow(sum / n, 2));
-    std_err = Math.round(1.96 * std_dev / Math.sqrt(n));
-    std_dev = Math.round(std_dev);
-    n = bandwidths.length - 1;
-    median = Math.round((bandwidths[Math.floor(n / 2)] + bandwidths[Math.ceil(n / 2)]) / 2);
-    n = bandwidths_corrected.length;
-    amean_corrected = Math.round(sum_corrected / n);
-    std_dev_corrected = Math.sqrt(sumsq_corrected / n - Math.pow(sum_corrected / n, 2));
-    std_err_corrected = (1.96 * std_dev_corrected / Math.sqrt(n)).toFixed(2);
-    std_dev_corrected = std_dev_corrected.toFixed(2);
-    n = bandwidths_corrected.length - 1;
-    median_corrected = Math.round((bandwidths_corrected[Math.floor(n / 2)] + bandwidths_corrected[Math.ceil(n / 2)]) / 2);
-    BOOMR.debug("amean: " + amean + ", median: " + median, "bw");
-    BOOMR.debug("corrected amean: " + amean_corrected + ", " + "median: " + median_corrected, "bw");
-    return{mean:amean, stddev:std_dev, stderr:std_err, median:median, mean_corrected:amean_corrected, stddev_corrected:std_dev_corrected, stderr_corrected:std_err_corrected, median_corrected:median_corrected, debug_info:debug_info}
-  }, defer:function(method) {
-    var that = impl;
-    return setTimeout(function() {
-      method.call(that);
-      that = null
-    }, 10)
-  }, load_img:function(i, run, callback) {
-    var url = impl.base_url + images[i].name + "?t=" + (new Date).getTime() + Math.random(), timer = 0, tstart = 0, img = new Image, that = impl;
-    img.onload = function() {
-      img.onload = img.onerror = null;
-      img = null;
-      clearTimeout(timer);
-      if(callback) {
-        callback.call(that, i, tstart, run, true)
-      }
-      that = callback = null
-    };
-    img.onerror = function() {
-      img.onload = img.onerror = null;
-      img = null;
-      clearTimeout(timer);
-      if(callback) {
-        callback.call(that, i, tstart, run, false)
-      }
-      that = callback = null
-    };
-    timer = setTimeout(function() {
-      if(callback) {
-        callback.call(that, i, tstart, run, null)
-      }
-    }, images[i].timeout + Math.min(400, impl.latency ? impl.latency.mean : 400));
-    tstart = (new Date).getTime();
-    img.src = url
-  }, lat_loaded:function(i, tstart, run, success) {
-    if(run !== impl.latency_runs + 1) {
-      return
-    }
-    if(success !== null) {
-      var lat = (new Date).getTime() - tstart;
-      impl.latencies.push(lat)
-    }
-    if(impl.latency_runs === 0) {
-      impl.latency = impl.calc_latency()
-    }
-    impl.defer(impl.iterate)
-  }, img_loaded:function(i, tstart, run, success) {
-    if(run !== impl.runs_left + 1) {
-      return
-    }
-    if(impl.results[impl.nruns - run].r[i]) {
-      return
-    }
-    if(success === null) {
-      impl.results[impl.nruns - run].r[i + 1] = {t:null, state:null, run:run};
-      return
-    }
-    var result = {start:tstart, end:(new Date).getTime(), t:null, state:success, run:run};
-    if(success) {
-      result.t = result.end - result.start
-    }
-    impl.results[impl.nruns - run].r[i] = result;
-    if(i >= images.end - 1 || impl.results[impl.nruns - run].r[i + 1] !== undefined) {
-      BOOMR.debug(impl.results[impl.nruns - run], "bw");
-      if(run === impl.nruns) {
-        images.start = i
-      }
-      impl.defer(impl.iterate)
-    }else {
-      impl.load_img(i + 1, run, impl.img_loaded)
-    }
-  }, finish:function() {
-    if(!impl.latency) {
-      impl.latency = impl.calc_latency()
-    }
-    var bw = impl.calc_bw(), o = {bw:bw.median_corrected, bw_err:parseFloat(bw.stderr_corrected), lat:impl.latency.mean, lat_err:parseFloat(impl.latency.stderr), bw_time:Math.round((new Date).getTime() / 1E3)};
-    BOOMR.addVar(o);
-    if(bw.debug_info.length > 0) {
-      BOOMR.addVar("bw_debug", bw.debug_info.join(","))
-    }
-    if(!isNaN(o.bw) && o.bw > 0) {
-      BOOMR.utils.setCookie(impl.cookie, {ba:Math.round(o.bw), be:o.bw_err, l:o.lat, le:o.lat_err, ip:impl.user_ip, t:o.bw_time}, impl.user_ip ? impl.cookie_exp : 0)
-    }
-    impl.complete = true;
-    BOOMR.sendBeacon();
-    impl.running = false
-  }, iterate:function() {
-    if(impl.aborted) {
-      return false
-    }
-    if(!impl.runs_left) {
-      impl.finish()
-    }else {
-      if(impl.latency_runs) {
-        impl.load_img("l", impl.latency_runs--, impl.lat_loaded)
-      }else {
-        impl.results.push({r:[]});
-        impl.load_img(images.start, impl.runs_left--, impl.img_loaded)
-      }
-    }
-  }, setVarsFromCookie:function(cookies) {
-    var ba = parseInt(cookies.ba, 10), bw_e = parseFloat(cookies.be), lat = parseInt(cookies.l, 10) || 0, lat_e = parseFloat(cookies.le) || 0, c_sn = cookies.ip.replace(/\.\d+$/, "0"), t = parseInt(cookies.t, 10), p_sn = impl.user_ip.replace(/\.\d+$/, "0"), t_now = Math.round((new Date).getTime() / 1E3);
-    if(c_sn === p_sn && (t >= t_now - impl.cookie_exp && ba > 0)) {
-      impl.complete = true;
-      BOOMR.addVar({"bw":ba, "lat":lat, "bw_err":bw_e, "lat_err":lat_e});
-      return true
-    }
-    return false
-  }};
-  var bw = BOOMR.plugins.BW = {init:function(config) {
-    var cookies;
-    if(impl.initialized) {
-      return bw
-    }
-    BOOMR.utils.pluginConfig(impl, config, "BW", ["base_url", "timeout", "nruns", "cookie", "cookie_exp"]);
-    if(config && config.user_ip) {
-      impl.user_ip = config.user_ip
-    }
-    if(!impl.base_url) {
-      return bw
-    }
-    images.start = 0;
-    impl.runs_left = impl.nruns;
-    impl.latency_runs = 10;
-    impl.results = [];
-    impl.latencies = [];
-    impl.latency = null;
-    impl.complete = false;
-    impl.aborted = false;
-    BOOMR.removeVar("ba", "ba_err", "lat", "lat_err");
-    cookies = BOOMR.utils.getSubCookies(BOOMR.utils.getCookie(impl.cookie));
-    if(!cookies || (!cookies.ba || !impl.setVarsFromCookie(cookies))) {
-      BOOMR.subscribe("page_ready", bw.run, null, bw);
-      BOOMR.subscribe("page_unload", bw.skip, null, bw)
-    }
-    impl.initialized = true;
-    return bw
-  }, run:function() {
-    if(impl.running || impl.complete) {
-      return bw
-    }
-    if(BOOMR.window.location.protocol === "https:") {
-      BOOMR.info("HTTPS detected, skipping bandwidth test", "bw");
-      impl.complete = true;
-      BOOMR.sendBeacon();
-      return bw
-    }
-    impl.running = true;
-    setTimeout(bw.abort, impl.timeout);
-    impl.defer(impl.iterate);
-    return bw
-  }, abort:function() {
-    impl.aborted = true;
-    if(impl.running) {
-      impl.finish()
-    }
-    return bw
-  }, skip:function() {
-    if(!impl.complete) {
-      impl.complete = true;
-      BOOMR.sendBeacon()
-    }
-    return bw
-  }, is_complete:function() {
-    return impl.complete
-  }}
-}
-bwrun();
-function ipv6run() {
-  BOOMR = BOOMR || {};
-  BOOMR.plugins = BOOMR.plugins || {};
-  var impl = {complete:false, ipv6_url:"", host_url:"", timeout:1200, timers:{ipv6:{start:null, end:null}, host:{start:null, end:null}}, start:function() {
-    impl.load_img("ipv6", "host")
-  }, load_img:function(arg0) {
-    var img, rnd = "?t=" + (new Date).getTime() + Math.random(), timer = 0, error = null, that = impl, which = Array.prototype.shift.call(arguments), a = arguments;
-    if(!which || !impl.timers.hasOwnProperty(which)) {
-      impl.done();
-      return false
-    }
-    if(!impl[which + "_url"]) {
-      return impl.load_img.apply(impl, a)
-    }
-    img = new Image;
-    img.onload = function() {
-      that.timers[which].end = (new Date).getTime();
-      clearTimeout(timer);
-      img.onload = img.onerror = null;
-      img = null;
-      that.load_img.apply(that, a);
-      that = a = null
-    };
-    error = function() {
-      that.timers[which].supported = false;
-      clearTimeout(timer);
-      img.onload = img.onerror = null;
-      img = null;
-      that.done();
-      that = a = null
-    };
-    img.onerror = error;
-    timer = setTimeout(error, impl.timeout);
-    impl.timers[which].start = (new Date).getTime();
-    img.src = impl[which + "_url"] + rnd;
-    return true
-  }, done:function() {
-    if(impl.complete) {
-      return
-    }
-    BOOMR.removeVar("ipv6_latency", "ipv6_lookup");
-    if(impl.timers.ipv6.end !== null) {
-      BOOMR.addVar("ipv6_latency", impl.timers.ipv6.end - impl.timers.ipv6.start)
-    }else {
-      BOOMR.addVar("ipv6_latency", "NA")
-    }
-    if(impl.timers.host.end !== null) {
-      BOOMR.addVar("ipv6_lookup", impl.timers.host.end - impl.timers.host.start)
-    }else {
-      BOOMR.addVar("ipv6_lookup", "NA")
-    }
-    impl.complete = true;
-    BOOMR.sendBeacon()
-  }, skip:function() {
-    if(!impl.complete) {
-      impl.complete = true;
-      BOOMR.sendBeacon()
-    }
-    return impl
-  }};
-  var ipv6 = BOOMR.plugins.IPv6 = {init:function(config) {
-    BOOMR.utils.pluginConfig(impl, config, "IPv6", ["ipv6_url", "host_url", "timeout"]);
-    if(!impl.ipv6_url) {
-      BOOMR.warn("IPv6.ipv6_url is not set.  Cannot run IPv6 test.", "ipv6");
-      impl.complete = true;
-      return ipv6
-    }
-    if(!impl.host_url) {
-      BOOMR.warn("IPv6.host_url is not set.  Will skip hostname test.", "ipv6")
-    }
-    if(BOOMR.window.location.protocol === "https:") {
-      impl.complete = true;
-      return ipv6
-    }
-    impl.ipv6_url = impl.ipv6_url.replace(/^https:/, "http:");
-    impl.host_url = impl.host_url.replace(/^https:/, "http:");
-    BOOMR.subscribe("page_ready", impl.start, null, impl);
-    BOOMR.subscribe("page_unload", impl.skip, null, impl);
-    return ipv6
-  }, is_complete:function() {
-    return impl.complete
-  }}
-}
-ipv6run();
-function dnsrun() {
-  BOOMR = BOOMR || {};
-  BOOMR.plugins = BOOMR.plugins || {};
-  var impl = {complete:false, base_url:"", t_start:null, t_dns:null, t_http:null, img:null, gen_url:"", start:function() {
-    if(impl.gen_url) {
-      return
-    }
-    var random = Math.random().toString(36), cache_bust = (new Date).getTime() + "." + Math.random();
-    impl.gen_url = impl.base_url.replace(/\*/, random);
-    impl.img = new Image;
-    impl.img.onload = impl.A_loaded;
-    impl.t_start = (new Date).getTime();
-    impl.img.src = impl.gen_url + "image-l.gif?t=" + cache_bust
-  }, A_loaded:function() {
-    var cache_bust;
-    impl.t_dns = (new Date).getTime() - impl.t_start;
-    cache_bust = (new Date).getTime() + "." + Math.random();
-    impl.img = new Image;
-    impl.img.onload = impl.B_loaded;
-    impl.t_start = (new Date).getTime();
-    impl.img.src = impl.gen_url + "image-l.gif?t=" + cache_bust
-  }, B_loaded:function() {
-    impl.t_http = (new Date).getTime() - impl.t_start;
-    impl.img = null;
-    impl.done()
-  }, done:function() {
-    var dns = impl.t_dns - impl.t_http;
-    BOOMR.addVar("dns.t", dns);
-    impl.complete = true;
-    impl.gen_url = "";
-    BOOMR.sendBeacon()
-  }};
-  var dns = BOOMR.plugins.DNS = {init:function(config) {
-    BOOMR.utils.pluginConfig(impl, config, "DNS", ["base_url"]);
-    if(!impl.base_url) {
-      BOOMR.warn("DNS.base_url is not set.  Cannot run DNS test.", "dns");
-      impl.complete = true;
-      return dns
-    }
-    if(BOOMR.window.location.protocol === "https:") {
-      impl.complete = true;
-      return dns
-    }
-    BOOMR.subscribe("page_ready", impl.start, null, impl);
-    return dns
-  }, is_complete:function() {
-    return impl.complete
-  }}
-}
-dnsrun();
 function memoryrun() {
   BOOMR = BOOMR || {};
   BOOMR.plugins = BOOMR.plugins || {};
@@ -1245,36 +839,41 @@ function kylierun() {
   }}
 }
 kylierun();
-var disabled = {enabled:false};
-BOOMR.init({log:null, wait:true, BW:disabled, DNS:disabled, IPv6:disabled, Kylie:disabled, autorun:false});
+BOOMR.init({log:null, wait:true, Kylie:{enabled:false}, autorun:false});
 BOOMR.t_end = (new Date).getTime();
+var PerfLogLevel = {DEBUG:{name:"DEBUG", value:1}, INTERNAL:{name:"INTERNAL", value:2}, PRODUCTION:{name:"PRODUCTION", value:3}};
+var PerfConstants = {PAGE_START_MARK:"PageStart", PERF_PAYLOAD_PARAM:"bulkPerf", MARK_NAME:"mark", MEASURE_NAME:"measure", MARK_START_TIME:"st", MARK_LAST_TIME:"lt", PAGE_NAME:"pn", ELAPSED_TIME:"et", REFERENCE_TIME:"rt", Perf_LOAD_DONE:"loadDone"};
+PerfConstants.STATS = {NAME:"stat", SERVER_ELAPSED:"internal_serverelapsed", DB_TOTAL_TIME:"internal_serverdbtotaltime", DB_CALLS:"internal_serverdbcalls", DB_FETCHES:"internal_serverdbfetches"};
+window["PerfConstants"] = PerfConstants;
+window["PerfLogLevel"] = PerfLogLevel;
 window.typePerfLogLevel;
 window.typejsonMeasure;
-function IPerfStubs() {
-}
-IPerfStubs.prototype.mark;
-IPerfStubs.prototype.endMark;
-IPerfStubs.prototype.stat;
-IPerfStubs.prototype.measure;
 function IPerf() {
 }
 IPerf.prototype.mark;
 IPerf.prototype.endMark;
-IPerf.prototype.setTimer;
+IPerf.prototype.updateMarkName;
 IPerf.prototype.measureToJson;
 IPerf.prototype.toJson;
+IPerf.prototype.setTimer;
 IPerf.prototype.toPostVar;
 IPerf.prototype.getMeasures;
 IPerf.prototype.getBeaconData;
 IPerf.prototype.setBeaconData;
 IPerf.prototype.clearBeaconData;
+IPerf.prototype.removeStats;
+IPerf.prototype.stat;
+IPerf.prototype.getStat;
+IPerf.prototype.onLoad;
 IPerf.prototype.startTransaction;
 IPerf.prototype.endTransaction;
 IPerf.prototype.updateTransaction;
-IPerf.prototype.stat;
-IPerf.prototype.getStat;
-IPerf.prototype.removeStats;
 IPerf.prototype.measure;
+IPerf.prototype.enabled;
+function IPerf_util() {
+}
+IPerf.prototype.utils;
+IPerf_util.prototype.setCookie;
 var perfOptions = window["perfOptions"];
 if(perfOptions) {
   if(!perfOptions.pageStartTime) {
@@ -1287,15 +886,16 @@ if(perfOptions) {
   perfOptions = {pageStartTime:(new Date).getTime()}
 }
 var BEACONURL = "";
-var beaconData = "";
-var PerfLogLevel = {DEBUG:{name:"DEBUG", value:1}, INTERNAL:{name:"INTERNAL", value:2}, PRODUCTION:{name:"PRODUCTION", value:3}};
-var KylieConstants = {PAGE_START_MARK:"PageStart", KYLIE_PAYLOAD_PARAM:"bulkKylie", MARK_NAME:"mark", MEASURE_NAME:"measure", MARK_START_TIME:"st", MARK_LAST_TIME:"lt", PAGE_NAME:"pn", ELAPSED_TIME:"et", REFERENCE_TIME:"rt", KYLIE_LOAD_DONE:"loadDone"};
-KylieConstants.STATS = {NAME:"stat", SERVER_ELAPSED:"internal_serverelapsed", DB_TOTAL_TIME:"internal_serverdbtotaltime", DB_CALLS:"internal_serverdbcalls", DB_FETCHES:"internal_serverdbfetches"};
+var _beaconData = null;
 function getLogLevel(logLevel) {
   if(typeof logLevel === "string") {
     logLevel = PerfLogLevel[logLevel]
   }
   return logLevel || PerfLogLevel.PRODUCTION
+}
+function updateTimerName(oldName, newName) {
+  BOOMR.plugins.RT.updateTimer(oldName, newName);
+  return Perf
 }
 var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOptions.pageStartTime, mark:function(id, logLevel) {
   if(Perf.currentLogLevel.value <= getLogLevel(logLevel).value) {
@@ -1307,7 +907,7 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOp
     BOOMR.plugins.RT.endTimer(id)
   }
   return Perf
-}, setTimer:function(timer_name, timer_delta, logLevel) {
+}, updateMarkName:updateTimerName, setTimer:function(timer_name, timer_delta, logLevel) {
   if(Perf.currentLogLevel.value <= getLogLevel(logLevel).value) {
     if(timer_delta >= 0) {
       BOOMR.plugins.RT.setTimer(timer_name, timer_delta)
@@ -1317,7 +917,7 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOp
   }
   return Perf
 }, measureToJson:function(measure) {
-  return["{", KylieConstants.MEASURE_NAME, ':"', measure[KylieConstants.MEASURE_NAME], '",', KylieConstants.MARK_NAME, ':"', measure[KylieConstants.MARK_NAME], '",', KylieConstants.ELAPSED_TIME, ":", measure[KylieConstants.ELAPSED_TIME], ",", KylieConstants.REFERENCE_TIME, ":", measure[KylieConstants.REFERENCE_TIME], "}"].join("")
+  return"{" + PerfConstants.MEASURE_NAME + ':"' + measure[PerfConstants.MEASURE_NAME] + '",' + PerfConstants.MARK_NAME + ':"' + measure[PerfConstants.MARK_NAME] + '",' + PerfConstants.ELAPSED_TIME + ":" + measure[PerfConstants.ELAPSED_TIME] + "," + PerfConstants.REFERENCE_TIME + ":" + measure[PerfConstants.REFERENCE_TIME] + "}"
 }, toJson:function(includeMarks) {
   BOOMR.plugins.RT.updateVars();
   var timers = BOOMR.plugins.RT.getTimers(), rt = BOOMR.plugins.RT.getSessionStart(), json = ["{", 'sessionID:"', BOOMR.plugins.RT.getSessionID(), '",', "st:", rt, ",", 'pn:"', window.document.URL, '",', 'uid:"', Math.round(Math.random() * 1E15), '",'], markJson = [], measureJson = [], k, measure, vars = BOOMR.getVars(), timer;
@@ -1328,11 +928,11 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOp
           markJson.push('"' + k + '":' + vars[k])
         }
         measure = {};
-        measure[KylieConstants.MEASURE_NAME] = k;
-        measure[KylieConstants.MARK_NAME] = k;
-        measure[KylieConstants.ELAPSED_TIME] = vars[k];
+        measure[PerfConstants.MEASURE_NAME] = k;
+        measure[PerfConstants.MARK_NAME] = k;
+        measure[PerfConstants.ELAPSED_TIME] = vars[k];
         timer = timers[k];
-        measure[KylieConstants.REFERENCE_TIME] = timer && timer.start ? timer.start : rt;
+        measure[PerfConstants.REFERENCE_TIME] = timer && timer.start ? timer.start : rt;
         measureJson.push(Perf.measureToJson(measure))
       }
     }
@@ -1343,7 +943,7 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOp
   json.push("measures:[", measureJson.join(","), "]}");
   return json.join("")
 }, toPostVar:function() {
-  return KylieConstants.KYLIE_PAYLOAD_PARAM + "=" + Perf.toJson().replace(/&/g, "__^__")
+  return PerfConstants.PERF_PAYLOAD_PARAM + "=" + Perf.toJson().replace(/&/g, "__^__")
 }, getMeasures:function() {
   BOOMR.plugins.RT.updateVars();
   var timers = BOOMR.plugins.RT.getTimers(), rt = BOOMR.plugins.RT.getSessionStart(), measures = [], vars = BOOMR.getVars(), k, measure;
@@ -1351,25 +951,23 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOp
     if(k != "r" && (k != "r2" && k != "t_other")) {
       if(vars.hasOwnProperty(k) && !isNaN(vars[k])) {
         measure = {};
-        measure[KylieConstants.MEASURE_NAME] = k;
-        measure[KylieConstants.MARK_NAME] = k;
-        measure[KylieConstants.ELAPSED_TIME] = vars[k];
-        measure[KylieConstants.REFERENCE_TIME] = timers[k] ? timers[k].start : rt;
+        measure[PerfConstants.MEASURE_NAME] = k;
+        measure[PerfConstants.MARK_NAME] = k;
+        measure[PerfConstants.ELAPSED_TIME] = vars[k];
+        measure[PerfConstants.REFERENCE_TIME] = timers[k] ? timers[k].start : rt;
         measures.push(measure)
       }
     }
   }
   return measures
 }, getBeaconData:function() {
-  return beaconData
-}, setBeaconData:function(_beaconData) {
-  beaconData = _beaconData
+  return _beaconData
+}, setBeaconData:function(beaconData) {
+  _beaconData = beaconData
 }, clearBeaconData:function() {
-  beaconData = ""
+  _beaconData = null
 }, removeStats:function() {
   BOOMR.removeStats()
-}, init:function(args) {
-  BOOMR.init({BW:{enabled:false}, beacon_url:BEACONURL, autorun:false})
 }, subscribe:BOOMR.subscribe, stat:function(label, elapsedMillis) {
   BOOMR.addVar("st_" + label, elapsedMillis);
   return Perf
@@ -1384,12 +982,12 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOp
 }, measure:function(measureName, id, logLevel) {
   return Perf.endMark(id, logLevel)
 }, startTransaction:function(tName) {
-  return BOOMR.plugins.RT.startTransaction(tName)
+  BOOMR.plugins.RT.startTransaction(tName);
+  return Perf
 }, endTransaction:function(tName) {
-  return BOOMR.plugins.RT.endTransaction(tName)
-}, updateTransaction:function(oldName, newName) {
-  return BOOMR.plugins.RT.updateTimer(oldName, newName)
-}, onLoadFired:function() {
+  BOOMR.plugins.RT.endTransaction(tName);
+  return Perf
+}, updateTransaction:updateTimerName, onLoadFired:function() {
   return BOOMR.plugins.RT.onLoadFired()
 }, util:{setCookie:function(name, value, expires, path) {
   document.cookie = name + "=" + escape(value + "") + (expires ? "; expires=" + expires.toGMTString() : "") + (path ? "; path=" + path : "; path=/")
@@ -1398,5 +996,5 @@ var ROOT_NAMESPACE = "Kylie";
 window["Perf"] = Perf;
 window[ROOT_NAMESPACE] = Perf;
 window["PerfLogLevel"] = PerfLogLevel;
-window["KylieConstants"] = KylieConstants;
+window["PerfConstants"] = PerfConstants;
 })(this);
