@@ -3,7 +3,7 @@
 <head><title>Stats: Perf</title></head>
 <body onload="Perf.onLoad()">
 This page should load without javascript errors.<br>
-This page calls init() with no parameters, so onload should fire and try to measure page performance.<br>
+This page calls <code>mark()</code> with 1 parameter, mark name, so it will try to measure the time to load the table using the mark name, "Twain".<br>
 Status: <span id="state" style="background-color:green;">PASS</span>
 <script>
 window.onerror = function() {
@@ -13,7 +13,7 @@ window.onerror = function() {
 }
 var perfOptions = {logLevel:"PerfLogLevel.INTERNAL", bURL:"/forcedotcom/boomerang", pageStartTime: (new Date).getTime()};
 </script>
-<script src="../perf-0.9.1380694690-debug.js"></script>
+<script src="../perf.js"></script>
 <script>Perf.mark("Twain")</script>
 <table>
 <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>

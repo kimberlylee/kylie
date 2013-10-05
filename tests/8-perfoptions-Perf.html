@@ -3,10 +3,10 @@
 <head><title>Perfoptions: Perf</title></head>
 <body onload="Perf.onLoad()">
 This page should load without javascript errors.<br>
-This page calls init() with no parameters, so onload should fire and try to measure page performance.<br>
+This page sets the <code>perfOptions</code> JavaScript object with 3 attribute, "logLevel", "bURL", and "pageStartTime", so onload should fire and try to measure page performance.<br>
 Status: <span id="state" style="background-color:green;">PASS</span>
 <script>
-window.onerror = function() {
+window.onerror = function () {
 	var st = document.getElementById("state");
 	st.style.backgroundColor="red";
 	st.innerHTML = "FAIL";
