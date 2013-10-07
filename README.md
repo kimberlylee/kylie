@@ -30,36 +30,36 @@ The simple synchronous way to include Kylie on your page...
 
     <script src="http://your-cdn.host.com/path/to/perf.js"></script>
     ...
-    <body onload="perf.onLoad()">
+    <body onload="Perf.onLoad()">
 
-This does not work asynchronously. Based on the way that it is setup it needs to call `perf.onLoad()` explicitly because most complex sites do not have a standard measure to say that the page is fully loaded.
+This does not work asynchronously. Based on the way that it is setup it needs to call `Perf.onLoad()` explicitly because most complex sites do not have a standard measure to say that the page is fully loaded.
 
 Kylie can also capture the client-side time on the browser for a page. To accurately facilitate this you need to include a reference time at the top of the page `var perfOptions={pageStartTime:new Date()};`.
 
     <script>var perfOptions={pageStartTime:new Date()};</script>
     <script src="http://your-cdn.host.com/path/to/perf.js"></script>
     ...
-    <body onload="perf.onLoad()">
+    <body onload="Perf.onLoad()">
 
 If `pageStartTime` is not included on the page then a `new Date()` is instantiated after downloading/parsing perf.js and is used in it's place.
 
 ### Adding Custom Measurements ##
 
-Kylie can be used to measure the time it takes to load specific parts of a web page.  It is as simple as calling `perf.mark("Twain")` to start the timer and `perf.endMark("Twain")` to end the timer. This will capture the elapsed time of the instrumented code and a reference time that can be used to order it within the other metrics. All of this will be reported under the mark name "Twain".
+Kylie can be used to measure the time it takes to load specific parts of a web page.  It is as simple as calling `Perf.mark("Twain")` to start the timer and `Perf.endMark("Twain")` to end the timer. This will capture the elapsed time of the instrumented code and a reference time that can be used to order it within the other metrics. All of this will be reported under the mark name "Twain".
 
 #### Simple Example ####
 
     <script>
-    perf.mark("Twain");
+    Perf.mark("Twain");
     console.log("Number of DOM elements: " + document.getElementsByTagName("*").length);
-    perf.endMark("Twain");
+    Perf.endMark("Twain");
     </script>
 
 ### Accessing Metrics ###
 
 If the beacon URL is set then the data can be read in JSON format from the server. Inside the boomerang.js file the URL to report the captured measurements is set in the `beacon_url` url parameter.
 
-From the browser console or JavaScript you can access the parameters using `perf.toJson()`.
+From the browser console or JavaScript you can access the parameters using `Perf.toJson()`.
 
 ## What makes this fork better than any other implementation of Boomerang? ##
 
