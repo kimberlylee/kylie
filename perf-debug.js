@@ -336,7 +336,7 @@ function run(w) {
     return impl.vars[name]
   }, removeStats:function() {
     impl.vars = {};
-    BOOMR.plugins["RT"]["clearTimers"]();
+    BOOMR.plugins.RT.clearTimers();
     return BOOMR
   }, sendBeacon:function() {
     var l, url, img, nparams = 0;

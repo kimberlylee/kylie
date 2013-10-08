@@ -677,7 +677,7 @@ function run(w) {
          */
         removeStats: function () {
             impl.vars = {};
-            BOOMR.plugins["RT"]["clearTimers"]();
+            BOOMR.plugins.RT.clearTimers();
             return BOOMR;
         },
 
