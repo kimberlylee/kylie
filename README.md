@@ -20,7 +20,7 @@ and
 
 ## Summary ##
 
-Kylie is a piece of JavaScript that is embedded in a webpage to monitor how long it takes for users to load the page. This is also commonly referred to as [RUM](https://en.wikipedia.org/wiki/Real_user_monitoring). Kylie is also a fork of [boomerang](https://github.com/lognormal/boomerang) that is designed to reduce the [observer effect](https://en.wikipedia.org/wiki/Observer_effect_\(physics\)) and add new features.
+Kylie is a piece of JavaScript that is embedded in a webpage to monitor how long it takes for users to load the page; this is commonly referred to as [RUM](https://en.wikipedia.org/wiki/Real_user_monitoring). It is also a fork of [boomerang](https://github.com/lognormal/boomerang) and is designed to reduce the [observer effect](https://en.wikipedia.org/wiki/Observer_effect_\(physics\)) and add new features.
 
 Apart from page load time, Kylie measures a whole bunch of performance characteristics of your user's web browsing experience. All you have to do is stick it into your web pages and call the `onLoad()` method at the very end of the page load.
 
@@ -36,7 +36,7 @@ This does not work asynchronously. Based on the way that it is setup it needs to
 
 Kylie can also capture the client-side time on the browser for a page. To accurately facilitate this you need to include a reference time at the top of the page `var perfOptions={pageStartTime:new Date()};`.
 
-    <script>var perfOptions={pageStartTime:new Date()};</script>
+    <script>var perfOptions={pageStartTime:(new Date).getTime()};</script>
     <script src="http://your-cdn.host.com/path/to/perf.js"></script>
     ...
     <body onload="Perf.onLoad()">
@@ -81,8 +81,8 @@ The code was also re-designed to use `"use strict";` and be compatible with it. 
 
 ## Support ##
 
-All support, questions, bug fixing, is done via our github repository at <https://github.com/forcedotcom/boomerang/issues>. You'll need a github account to participate, but then you'll need one to check out the code as well :-)
+All support, questions, bug fixing, is done via our github repository at <https://github.com/forcedotcom/kylie/issues>. You'll need a github account to participate, but then you'll need one to check out the code as well :-)
 
-I would like to thank you for taking a look at Kylie.  Please leave us a message telling us if you use our version.
+I would like to thank you for taking a look at Kylie. Please leave us a message telling us if you use our version.
 
 Kylie is supported by the [Perf Eng team at Salesforce.com](http://www.salesforce.com/company/careers/technology/perfengineering.jsp), and the community of opensource developers / DevOps / Perforce engineers who use and hack it.
