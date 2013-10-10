@@ -64,7 +64,7 @@ function memoryrun() {
      * @struct
      * @const
      */
-    var memory = BOOMR.plugins.Memory = {
+    var memory = BOOMR.plugins.Memory =  /** @implements {IPlugin} */ {
         /**
          * @return {!Object}
          */

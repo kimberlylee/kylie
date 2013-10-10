@@ -471,7 +471,7 @@ function bwrun() {
      * @struct
      * @const
      */
-    var bw = BOOMR.plugins.BW = {
+    var bw = BOOMR.plugins.BW =  /** @implements {IPlugin} */ {
         /**
          * @param {Object.<string, ?>|null} config
          * @return {!Object}

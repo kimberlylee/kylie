@@ -22,19 +22,14 @@ function IPerf() {}
 
 /**
  * @param {!string} id The id used to identify the mark.
- * @param {window.typePerfLogLevel=} logLevel The level at which this mark should
- * be logged at.
+ * @param {string|window.typePerfLogLevel=} logLevel The level at which this mark should be logged at.
  * @return {!IPerf}
- * @override
  */
 IPerf.prototype.mark;
 /**
- * @param {!string} id This is the id associated with the mark that uses
- * the same id.
- * @param {window.typePerfLogLevel=} logLevel The level at which this mark should
- * be logged at.
+ * @param {!string} id This is the id associated with the mark that uses the same id.
+ * @param {string|window.typePerfLogLevel=} logLevel The level at which this mark should be logged at.
  * @return {!IPerf}
- * @override
  */
 IPerf.prototype.endMark;
 /**
@@ -48,12 +43,14 @@ IPerf.prototype.endMark;
 IPerf.prototype.updateMarkName;
 /**
  * Serializes a measure object to JSON.
+ * 
  * @param {!window.typejsonMeasure} measure The measure to serialize.
  * @return {!string} JSON-serialized version of the supplied marks.
  */
 IPerf.prototype.measureToJson;
 /**
  * Serializes timers to JSON.
+ * 
  * @param {boolean=} includeMarks
  * @return {!string} JSON-serialized version of marks.
  */
@@ -86,7 +83,7 @@ IPerf.prototype.getBeaconData;
 /**
  * Sets the beaconData to piggyback on the next XHR call
  * 
- * @param {!string} _beaconData
+ * @param {!string} beaconData
  */
 IPerf.prototype.setBeaconData;
 /**
@@ -107,7 +104,6 @@ IPerf.prototype.removeStats;
  * @param {!string} label
  * @param {!number} elapsedMillis
  * @return {!IPerf}
- * @override
  */
 IPerf.prototype.stat;
 /**
@@ -142,18 +138,9 @@ IPerf.prototype.endTransaction;
  * 
  * @param {!string} oldName The id used to identify the old transaction name.
  * @param {!string} newName The id used to identify the new transaction name.
- * @return {!IPerf}
+ * @return {!IPerf} for chaining methods
  */
 IPerf.prototype.updateTransaction;
-/**
- * @param {?string} measureName Not used.
- * @param {!string} id This is the id associated with the mark that uses the same id.
- * @param {window.typePerfLogLevel=} logLevel The level at which this mark should be logged at.
- * @return {!IPerf}
- * @deprecated Use endMark instead
- * @override
- */
-IPerf.prototype.measure;
 
 /**
  * Whether the full Kylie framework is loaded, as opposed to just the stubs.

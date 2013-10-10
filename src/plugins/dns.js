@@ -86,7 +86,7 @@ function dnsrun() {
      * @struct
      * @const
      */
-    var dns = BOOMR.plugins.DNS = {
+    var dns = BOOMR.plugins.DNS =  /** @implements {IPlugin} */ {
         /**
          * @param {Object.<string, ?>|null} config
          * @return {!Object}

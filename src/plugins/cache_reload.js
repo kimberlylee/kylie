@@ -14,7 +14,7 @@ var impl = {
 	url: ""
 };
 
-BOOMR.plugins.CACHE_RELOAD = {
+BOOMR.plugins.CACHE_RELOAD =  /** @implements {IPlugin} */ {
 	init: function(config) {
 		BOOMR.utils.pluginConfig(impl, config, "CACHE_RELOAD", ["url"]);
 
@@ -38,4 +38,3 @@ BOOMR.plugins.CACHE_RELOAD = {
 };
 
 }());
-

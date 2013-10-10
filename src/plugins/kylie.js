@@ -57,7 +57,7 @@ function kylierun() {
      * @const
      * @namespace
      */
-    var kylie = BOOMR.plugins.Kylie = {
+    var kylie = BOOMR.plugins.Kylie =  /** @implements {IPlugin} */ {
         /**
          * @return {?Object}
          */

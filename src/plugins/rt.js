@@ -275,10 +275,10 @@ function runrt(w) {
      * @struct
      * @const
      */
-    var rt = BOOMR.plugins.RT = {
+    var rt = BOOMR.plugins.RT = /** @implements {IPlugin} */ {
         /**
-         * @param {Object.<string, ?>|null} config
-         * @return {?Object}
+         * @param {Object.<string, *>|null} config
+         * @return {!Object}
          */
         init : function (config) {
 
@@ -433,7 +433,9 @@ function runrt(w) {
         },
 
         /**
-         * Kylie implementation This method returns the set timers
+         * Kylie implementation
+         * This method returns the set timers
+         * 
          * @return {Object.<!​string, {start: (number|​undefined), end: (number|​undefined)}>​}
          */
         getTimers : function () {
@@ -441,7 +443,8 @@ function runrt(w) {
         },
 
         /**
-         * Kylie implementation This method is used to mark the start of a transaction
+         * Kylie implementation
+         * This method is used to mark the start of a transaction
          *
          * @return {!Object} for chaining methods
          */
@@ -450,7 +453,8 @@ function runrt(w) {
         },
 
         /**
-         * Kylie implementation This method is used to mark the end of a transaction
+         * Kylie implementation
+         * This method is used to mark the end of a transaction
          *
          * @return {!Object} for chaining methods
          */
@@ -459,7 +463,8 @@ function runrt(w) {
         },
 
         /**
-         * Kylie implementation This method returns the sessionID passed on by the server
+         * Kylie implementation
+         * This method returns the sessionID passed on by the server
          *
          * @return {!string}
          */
@@ -468,7 +473,8 @@ function runrt(w) {
         },
 
         /**
-         * Kylie implementation This method returns the start of the session
+         * Kylie implementation
+         * This method returns the start of the session
          *
          * @return {number|undefined}
          */
@@ -477,7 +483,8 @@ function runrt(w) {
         },
 
         /**
-         * Kylie implementation This method returns if onload has been fired or not
+         * Kylie implementation
+         * This method returns if onload has been fired or not
          *
          * @return {!boolean}
          */

@@ -157,7 +157,7 @@ function ipv6run() {
      * @struct
      * @const
      */
-    var ipv6 = BOOMR.plugins.IPv6 = {
+    var ipv6 = BOOMR.plugins.IPv6 =  /** @implements {IPlugin} */ {
         /**
          * @param {Object.<string, ?>|null} config
          * @return {?Object}

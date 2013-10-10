@@ -29,7 +29,7 @@ IBOOMR.prototype.t_lstart;
 IBOOMR.prototype.t_start;
 
 /**
- * @return {!Object}
+ * @return {!IBOOMR}
  */
 IBOOMR.prototype.sendBeacon;
 
@@ -98,24 +98,28 @@ IBOOMR.prototype.setBeaconUrl;
 /**
  * @param {string} message
  * @param {?string=} source
+ * @return {!IBOOMR}
  */
 IBOOMR.prototype.debug;
 
 /**
  * @param {string} message
  * @param {?string=} source
+ * @return {!IBOOMR}
  */
 IBOOMR.prototype.info;
 
 /**
  * @param {string} message
  * @param {?string=} source
+ * @return {!IBOOMR}
  */
 IBOOMR.prototype.warn;
 
 /**
  * @param {string} message
  * @param {?string=} source
+ * @return {!IBOOMR}
  */
 IBOOMR.prototype.error;
 
@@ -160,7 +164,7 @@ IBOOMR_utils.prototype.objectToString;
 
 /**
  * @param {?string=} name
- * @return ?string
+ * @return {?string}
  */
 IBOOMR_utils.prototype.getCookie;
 

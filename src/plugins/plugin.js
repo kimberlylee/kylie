@@ -30,10 +30,14 @@ own plugins.
     var impl = {
     };
 
+    /**
+     * @const
+     * @type {!IPlugin}
+     */
     BOOMR.plugins.MyPlugin = {
         /**
          * @param {Object.<string, ?>|null} config
-         * @return {?Object}
+         * @return {!IPlugin}
          */
         init: function (config) {
             var i,

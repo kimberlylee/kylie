@@ -59,7 +59,7 @@ function run(w) {
     var k;
 
     /**
-     * @type {Object.<string, ?>}
+     * @type {Object.<string, !(?)>}
      * @const
      */
     var perfOptions = w["perfOptions"] || {};
@@ -211,7 +211,7 @@ function run(w) {
      * @private
      * @const
      */
-    var boomr = {
+    var boomr = /** @implements {IBOOMR} */ {
         /**
          * @type {number|undefined}
          */
@@ -258,7 +258,7 @@ function run(w) {
 
             /**
              * @param {?string=} name
-             * @return ?string
+             * @return {?string}
              */
             getCookie: function (name) {
                 if (!name) {
@@ -392,21 +392,22 @@ function run(w) {
                 } else {
                     el.attachEvent("on" + type, fn);
                 }
-            },
-
-            /**
-             * @param {!Window|EventTarget} el
-             * @param {!string} type
-             * @param {function(?Event)} fn
-             * @private
-             */
-            removeListener: function (el, type, fn) {
-                if (el.removeEventListener) {
-                    el.removeEventListener(type, fn, false);
-                } else {
-                    el.detachEvent("on" + type, fn);
-                }
             }
+//            ,
+//
+//            /**
+//             * @param {!Window|EventTarget} el
+//             * @param {!string} type
+//             * @param {function(?Event)} fn
+//             * @private
+//             */
+//            removeListener: function (el, type, fn) {
+//                if (el.removeEventListener) {
+//                    el.removeEventListener(type, fn, false);
+//                } else {
+//                    el.detachEvent("on" + type, fn);
+//                }
+//            }
         },
 
         /**
@@ -682,7 +683,7 @@ function run(w) {
         },
 
         /**
-         * @return {!Object}
+         * @return {!IBOOMR}
          */
         sendBeacon: function () {
             var l,
@@ -755,43 +756,55 @@ function run(w) {
         setBeaconUrl: function (url) {
             impl["beacon_url"] = url;
         }
-
     };
 
     // Kylie implementation
     if (typeof perfOptions["BOOMR_lstart"] === "number") {
         boomr.t_lstart = perfOptions["BOOMR_lstart"];
-        delete perfOptions["BOOMR_lstart"];
     } else {
         boomr.t_lstart = 0;
     }
+    delete perfOptions["BOOMR_lstart"];
 
     (function () {
-        var make_logger = function (l) {
+        /**
+         * @param {!string} l error log
+         * @return {function(string, ?string=)}
+         */
+        function make_logger (l) {
+            /**
+             * @param {string} m
+             * @param {?string=} s 
+             * @return {!IBOOMR}
+             */
             return function (m, s) {
                 BOOMR.log(m, l, "boomerang" + (s ? "." + s : ""));
                 return BOOMR;
             };
-        };
+        }
 
         /**
          * @param {string} message
          * @param {?string=} source
+         * @return {!IBOOMR}
          */
         boomr.debug = make_logger("debug");
         /**
          * @param {string} message
          * @param {?string=} source
+         * @return {!IBOOMR}
          */
         boomr.info = make_logger("info");
         /**
          * @param {string} message
          * @param {?string=} source
+         * @return {!IBOOMR}
          */
         boomr.warn = make_logger("warn");
         /**
          * @param {string} message
          * @param {?string=} source
+         * @return {!IBOOMR}
          */
         boomr.error = make_logger("error");
     }());
@@ -810,6 +823,7 @@ function run(w) {
         }
     }
 
+    /** @type {Object.<!string, !IPlugin>} */
     BOOMR.plugins = BOOMR.plugins || {};
 
 }

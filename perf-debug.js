@@ -28,6 +28,10 @@ IBOOMR_utils.prototype.setCookie;
 IBOOMR_utils.prototype.removeCookie;
 IBOOMR_utils.prototype.pluginConfig;
 IBOOMR_utils.prototype.getSubCookies;
+function IPlugin() {
+}
+IPlugin.prototype.init;
+IPlugin.prototype.is_complete;
 /*
  Copyright (c) 2011, Yahoo! Inc.  All rights reserved.
  Copyright (c) 2012, Log-Normal, Inc.  All rights reserved.
@@ -162,12 +166,6 @@ function run(w) {
       el.addEventListener(type, fn, false)
     }else {
       el.attachEvent("on" + type, fn)
-    }
-  }, removeListener:function(el, type, fn) {
-    if(el.removeEventListener) {
-      el.removeEventListener(type, fn, false)
-    }else {
-      el.detachEvent("on" + type, fn)
     }
   }}, init:function(config) {
     var i, l, properties = ["beacon_url", "site_domain", "user_ip"];
@@ -377,18 +375,18 @@ function run(w) {
     impl["beacon_url"] = url
   }};
   if(typeof perfOptions["BOOMR_lstart"] === "number") {
-    boomr.t_lstart = perfOptions["BOOMR_lstart"];
-    delete perfOptions["BOOMR_lstart"]
+    boomr.t_lstart = perfOptions["BOOMR_lstart"]
   }else {
     boomr.t_lstart = 0
   }
+  delete perfOptions["BOOMR_lstart"];
   (function() {
-    var make_logger = function(l) {
+    function make_logger(l) {
       return function(m, s) {
         BOOMR.log(m, l, "boomerang" + (s ? "." + s : ""));
         return BOOMR
       }
-    };
+    }
     boomr.debug = make_logger("debug");
     boomr.info = make_logger("info");
     boomr.warn = make_logger("warn");
@@ -868,7 +866,6 @@ IPerf.prototype.onLoad;
 IPerf.prototype.startTransaction;
 IPerf.prototype.endTransaction;
 IPerf.prototype.updateTransaction;
-IPerf.prototype.measure;
 IPerf.prototype.enabled;
 function IPerf_util() {
 }
@@ -966,9 +963,7 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOp
   _beaconData = beaconData
 }, clearBeaconData:function() {
   _beaconData = null
-}, removeStats:function() {
-  BOOMR.removeStats()
-}, subscribe:BOOMR.subscribe, stat:function(label, elapsedMillis) {
+}, removeStats:BOOMR.removeStats, subscribe:BOOMR.subscribe, stat:function(label, elapsedMillis) {
   BOOMR.addVar("st_" + label, elapsedMillis);
   return Perf
 }, getStat:function(label) {
@@ -977,21 +972,15 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOp
     return-1
   }
   return BOOMR.getVar(label)
-}, onLoad:function() {
-  BOOMR.page_ready()
-}, measure:function(measureName, id, logLevel) {
-  return Perf.endMark(id, logLevel)
-}, startTransaction:function(tName) {
+}, onLoad:BOOMR.page_ready, startTransaction:function(tName) {
   BOOMR.plugins.RT.startTransaction(tName);
   return Perf
 }, endTransaction:function(tName) {
   BOOMR.plugins.RT.endTransaction(tName);
   return Perf
-}, updateTransaction:updateTimerName, onLoadFired:function() {
-  return BOOMR.plugins.RT.onLoadFired()
-}, util:{setCookie:function(name, value, expires, path) {
+}, updateTransaction:updateTimerName, onLoadFired:BOOMR.plugins.RT.onLoadFired, util:{setCookie:function(name, value, expires, path) {
   document.cookie = name + "=" + escape(value + "") + (expires ? "; expires=" + expires.toGMTString() : "") + (path ? "; path=" + path : "; path=/")
-}}, loaded:true, enabled:true});
+}}, enabled:true});
 var ROOT_NAMESPACE = "Kylie";
 window["Perf"] = Perf;
 window[ROOT_NAMESPACE] = Perf;

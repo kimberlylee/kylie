@@ -100,7 +100,7 @@ function navtimingrun() {
      * @struct
      * @const
      */
-    var nt = BOOMR.plugins.NavigationTiming = {
+    var nt = BOOMR.plugins.NavigationTiming =  /** @implements {IPlugin} */ {
         /**
          * @return {?Object}
          */

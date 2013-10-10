@@ -71,7 +71,7 @@ function updateTimerName(oldName, newName) {
  * @const
  * @type {!IPerf}
  */
-var Perf = /** @type {!IPerf} */({
+var Perf = /** @type {!IPerf} */ ({
     /**
      * @type {!window.typePerfLogLevel}
      * @private
@@ -145,6 +145,7 @@ var Perf = /** @type {!IPerf} */({
         }
         return Perf;
     },
+    
     /**
      * Serializes a measure object to JSON.
      *
@@ -276,14 +277,15 @@ var Perf = /** @type {!IPerf} */({
     /**
      * Removes the existing timers
      *
+     * @inheritDoc
      * @expose
      */
-    removeStats: function () {
-        BOOMR.removeStats();
-    },
+    removeStats: BOOMR.removeStats,
 
     /**
-     * @typedef {BOOMR.subscribe}
+     * @inheritDoc
+     * @typedef {IBOOMR.subscribe}
+     * @expose
      */
     subscribe: BOOMR.subscribe,
 
@@ -321,25 +323,12 @@ var Perf = /** @type {!IPerf} */({
      *
      * @expose
      */
-    onLoad: function () {
-        BOOMR.page_ready();
-    },
-
-    /**
-     * @param {?string} measureName Not used.
-     * @param {!string} id This is the id associated with the mark that uses the same id.
-     * @param {window.typePerfLogLevel=} logLevel The level at which this mark should be logged at.
-     * @return {!IPerf}
-     * @deprecated Use endMark instead
-     * @expose
-     */
-    measure: function (measureName, id, logLevel) {
-        return Perf.endMark(id, logLevel);
-    },
+    onLoad: BOOMR.page_ready,
 
     /**
      * This method is used to mark the start of a transaction
      *
+     * @param {!string} tName The id used to identify the transaction.
      * @return {!IPerf} for chaining methods
      * @expose
      */
@@ -351,6 +340,7 @@ var Perf = /** @type {!IPerf} */({
     /**
      * This method is used to mark the start of a transaction
      *
+     * @param {!string} tName The id used to identify the transaction.
      * @return {!IPerf} for chaining methods
      * @expose
      */
@@ -377,13 +367,11 @@ var Perf = /** @type {!IPerf} */({
      * @return {!boolean}
      * @expose
      */
-    onLoadFired: function () {
-        return BOOMR.plugins.RT.onLoadFired();
-    },
+    onLoadFired: BOOMR.plugins.RT.onLoadFired,
 
     /**
      * @namespace
-     * @type {{setCookie: function (string, (number|string), Date, string)}}
+     * @implements {IPerf_util}
      * @expose
      */
     util: {
@@ -400,13 +388,6 @@ var Perf = /** @type {!IPerf} */({
             document.cookie = name + "=" + escape(value + "") + ((expires) ? "; expires=" + expires.toGMTString() : "") + ((path) ? "; path=" + path : "; path=/");
         }
     },
-
-    /**
-     * @type {boolean}
-     * @const
-     * @expose
-     */
-    loaded: true,
 
     /**
      * Whether the full Kylie framework is loaded, as opposed to just the stubs.

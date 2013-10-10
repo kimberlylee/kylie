@@ -38,7 +38,7 @@ perf-$(VERSION).$(DATE).js: perf-$(VERSION).$(DATE)-debug.js
 	echo "Making $@ ..."
 	echo "using plugins: $(PLUGINS)..."
 	echo "using shim: $(SHIM)..."
-	$(MINIFIER)src/boomerangClousreCompilerTypes.js src/boomerang.js $(PLUGINS) $(SHIM) --js_output_file=$@
+	$(MINIFIER)src/boomerangClousreCompilerTypes.js src/pluginClousreCompilerTypes.js src/boomerang.js $(PLUGINS) $(SHIM) --js_output_file=$@
 	#Steps to connect the js file to the map file and handle some security
 	echo "/*" >> $@
 	echo "//@ sourceMappingURL=$(MAP_FILE_NAME)" >> $@
@@ -51,7 +51,7 @@ perf-$(VERSION).$(DATE)-debug.js: perfStub-$(VERSION).$(DATE).js
 	echo "Making $@ ..."
 	echo "using plugins: $(PLUGINS)..."
 	echo "using shim: $(SHIM)..."
-	$(MINIFIER_DEBUG)src/boomerangClousreCompilerTypes.js src/boomerang.js $(PLUGINS) $(SHIM) --js_output_file=$@
+	$(MINIFIER_DEBUG)src/boomerangClousreCompilerTypes.js src/pluginClousreCompilerTypes.js src/boomerang.js $(PLUGINS) $(SHIM) --js_output_file=$@
 	echo "done"
 	echo
 	
