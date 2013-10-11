@@ -48,7 +48,7 @@ function getLogLevel(logLevel) {
     if (typeof logLevel === "string") {
         logLevel = PerfLogLevel[logLevel];
     }
-    return logLevel || PerfLogLevel.PRODUCTION;
+    return logLevel || PerfLogLevel.INTERNAL;
 }
 
 /**

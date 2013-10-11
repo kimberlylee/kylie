@@ -888,7 +888,7 @@ function getLogLevel(logLevel) {
   if(typeof logLevel === "string") {
     logLevel = PerfLogLevel[logLevel]
   }
-  return logLevel || PerfLogLevel.PRODUCTION
+  return logLevel || PerfLogLevel.INTERNAL
 }
 function updateTimerName(oldName, newName) {
   BOOMR.plugins.RT.updateTimer(oldName, newName);

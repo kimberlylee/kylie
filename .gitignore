@@ -1,5 +1,3 @@
 .gitignore
 *.gz
-perf-*.js
-perf-*.map
-perfStub-*.js
+prod-*/
