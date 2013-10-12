@@ -1,85 +1,68 @@
 /*
  * Copyright (c), Log-Normal, Inc.
- * Copyright (c) 2013, Salesforce.com. All rights reserved.
  */
 
 /**
- * \file memory.js
- * Plugin to collect memory metrics when available.
- * see: http://code.google.com/p/chromium/issues/detail?id=43281
- * 
- * @private
- */
-function memoryrun() {
+\file memory.js
+Plugin to collect memory metrics when available.
+see: http://code.google.com/p/chromium/issues/detail?id=43281
+*/
 
-    // First make sure BOOMR is actually defined.  It's possible that your plugin is loaded before boomerang, in which case
-    // you'll need this.
-    BOOMR = BOOMR || {};
-    BOOMR.plugins = BOOMR.plugins || {};
+(function() {
 
-    /**
-     * A private object to encapsulate all your implementation details
-     * 
-     * @struct
-     * @private
-     * @const
-     */
-    var impl = {
-        complete: false,
-        done: function () {
-            var w  = BOOMR.window,
-                p  = w.performance,
-                c  = w.console,
-                d  = w.document,
-                fn = (({}).toString.call(w.opera) === '[object Opera]' ? d.querySelectorAll : d.getElementsByTagName),
-                m,
-                f;
+// First make sure BOOMR is actually defined.  It's possible that your plugin is loaded before boomerang, in which case
+// you'll need this.
+BOOMR = BOOMR || {};
+BOOMR.plugins = BOOMR.plugins || {};
 
-            // handle IE6/7 weirdness regarding host objects
-            // See: http://stackoverflow.com/questions/7125288/what-is-document-getelementbyid
-            f  = (fn.call === undefined ? /** @suppress {checkTypes} */function (tag) { return fn(tag); } : fn);
+// A private object to encapsulate all your implementation details
+var impl = {
+	complete: false,
+	done: function() {
+		var w  = BOOMR.window,
+		    p  = w.performance,
+		    c  = w.console,
+		    d  = w.document,
+		    fn = (({}).toString.call(w.opera) === '[object Opera]' ? d.querySelectorAll : d.getElementsByTagName),
+		    m, f;
 
-            m = (p && p.memory ? p.memory : (c && c.memory ? c.memory : null));
+		// handle IE6/7 weirdness regarding host objects
+		// See: http://stackoverflow.com/questions/7125288/what-is-document-getelementbyid
+		f  = (fn.call === undefined ? function(tag) { return fn(tag); } : fn);
 
-            if (m) {
-                BOOMR.addVar({
-                    'mem.total': m.totalJSHeapSize,
-                    'mem.used' : m.usedJSHeapSize
-                });
-            }
+		m = (p && p.memory ? p.memory : (c && c.memory ? c.memory : null));
 
-            BOOMR.addVar({
-                'dom.ln': f.call(d, '*').length,
-                'dom.sz': f.call(d, 'html')[0].innerHTML.length,
-                'dom.img': f.call(d, 'img').length,
-                'dom.script': f.call(d, 'script').length
-            });
+		if(m) {
+			BOOMR.addVar({
+				'mem.total': m.totalJSHeapSize,
+				'mem.used' : m.usedJSHeapSize
+			});
+		}
 
-            impl.complete = true;
-            BOOMR.sendBeacon();
-        }
-    };
 
-    /**
-     * @struct
-     * @const
-     */
-    var memory = BOOMR.plugins.Memory =  /** @implements {IPlugin} */ {
-        /**
-         * @return {!Object}
-         */
-        init: function () {
-            // we do this on onload so that we take a memory and dom snapshot after most things have run
-            BOOMR.subscribe("page_ready", impl.done, null, impl);
-            return memory;
-        },
+		BOOMR.addVar({
+			'dom.ln': f.call(d, '*').length,
+			'dom.sz': f.call(d, 'html')[0].innerHTML.length,
+			'dom.img': f.call(d, 'img').length,
+			'dom.script': f.call(d, 'script').length
+		});
 
-        /**
-         * @return {boolean}
-         */
-        is_complete: function () {
-            return impl.complete;
-        }
-    };
-}
-memoryrun();
+		this.complete = true;
+		BOOMR.sendBeacon();
+	}
+};
+
+BOOMR.plugins.Memory = {
+	init: function() {
+		// we do this on onload so that we take a memory and dom snapshot after most things have run
+		BOOMR.subscribe("page_ready", impl.done, null, impl);
+		return this;
+	},
+
+	is_complete: function() {
+		return impl.complete;
+	}
+};
+
+}());
+

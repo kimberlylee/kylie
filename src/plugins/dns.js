@@ -1,124 +1,106 @@
 /*
  * Copyright (c) 2011, Yahoo! Inc.  All rights reserved.
- * Copyright (c) 2013, Salesforce.com. All rights reserved.
  * Copyrights licensed under the BSD License. See the accompanying LICENSE.txt file for terms.
  */
 
 /**
- * \file dns.js
- * Plugin to measure DNS latency.
- * This code is based on Carlos Bueno's guide to DNS on the YDN blog:
- * http://developer.yahoo.net/blog/archives/2009/11/guide_to_dns.html
- * 
- * @private
- */
-function dnsrun() {
+\file dns.js
+Plugin to measure DNS latency.
+This code is based on Carlos Bueno's guide to DNS on the YDN blog:
+http://developer.yahoo.net/blog/archives/2009/11/guide_to_dns.html
+*/
 
-    BOOMR = BOOMR || {};
-    BOOMR.plugins = BOOMR.plugins || {};
+(function() {
 
-    /**
-     * @struct
-     * @private
-     * @const
-     */
-    var impl = {
-        complete: false,
-        base_url: "",
-        t_start: null,
-        t_dns: null,
-        t_http: null,
-        img: null,
+BOOMR = BOOMR || {};
+BOOMR.plugins = BOOMR.plugins || {};
 
-        gen_url: "",
+var impl = {
+	complete: false,
+	base_url: "",
+	t_start: null,
+	t_dns: null,
+	t_http: null,
+	img: null,
 
-        start: function () {
-            if (impl.gen_url) {    // already running
-                return;
-            }
+	gen_url: "",
 
-            var random = Math.random().toString(36),
-                cache_bust = (new Date().getTime()) + "." + (Math.random());
+	start: function() {
+		if(impl.gen_url) {	// already running
+			return;
+		}
 
-            impl.gen_url = impl.base_url.replace(/\*/, random);
+		var random = Math.random().toString(36),
+		    cache_bust = (new Date().getTime()) + "." + (Math.random());
 
-            impl.img = new Image();
-            impl.img.onload = impl.A_loaded;
+		impl.gen_url = impl.base_url.replace(/\*/, random);
 
-            impl.t_start = new Date().getTime();
-            impl.img.src = impl.gen_url + "image-l.gif?t=" + cache_bust;
-        },
+		impl.img = new Image();
+		impl.img.onload = impl.A_loaded;
 
-        A_loaded: function () {
-            var cache_bust;
-            impl.t_dns = new Date().getTime() - impl.t_start;
+		impl.t_start = new Date().getTime();
+		impl.img.src = impl.gen_url + "image-l.gif?t=" + cache_bust;
+	},
 
-            cache_bust = (new Date().getTime()) + "." + (Math.random());
+	A_loaded: function() {
+		var cache_bust;
+		impl.t_dns = new Date().getTime() - impl.t_start;
 
-            impl.img = new Image();
-            impl.img.onload = impl.B_loaded;
+		cache_bust = (new Date().getTime()) + "." + (Math.random());
 
-            impl.t_start = new Date().getTime();
-            impl.img.src = impl.gen_url + "image-l.gif?t=" + cache_bust;
-        },
+		impl.img = new Image();
+		impl.img.onload = impl.B_loaded;
 
-        B_loaded: function () {
-            impl.t_http = new Date().getTime() - impl.t_start;
+		impl.t_start = new Date().getTime();
+		impl.img.src = impl.gen_url + "image-l.gif?t=" + cache_bust;
+	},
 
-            impl.img = null;
-            impl.done();
-        },
+	B_loaded: function() {
+		impl.t_http = new Date().getTime() - impl.t_start;
 
-        done: function () {
-            // DNS time is the time to load the image with uncached DNS
-            // minus the time to load the image with cached DNS
+		impl.img = null;
+		impl.done();
+	},
 
-            var dns = impl.t_dns - impl.t_http;
+	done: function() {
+		// DNS time is the time to load the image with uncached DNS
+		// minus the time to load the image with cached DNS
 
-            BOOMR.addVar("dns.t", dns);
-            impl.complete = true;
-            impl.gen_url = "";
-            BOOMR.sendBeacon();
-        }
-    };
+		var dns = impl.t_dns - impl.t_http;
 
-    /**
-     * @struct
-     * @const
-     */
-    var dns = BOOMR.plugins.DNS =  /** @implements {IPlugin} */ {
-        /**
-         * @param {Object.<string, ?>|null} config
-         * @return {!Object}
-         */
-        init: function (config) {
-            BOOMR.utils.pluginConfig(impl, config, "DNS", ["base_url"]);
+		BOOMR.addVar("dns.t", dns);
+		impl.complete = true;
+		impl.gen_url = "";
+		BOOMR.sendBeacon();
+	}
+};
 
-            if (!impl.base_url) {
-                BOOMR.warn("DNS.base_url is not set.  Cannot run DNS test.", "dns");
-                impl.complete = true;    // set to true so that is_complete doesn't
-                            // block other plugins
-                return dns;
-            }
+BOOMR.plugins.DNS = {
+	init: function(config) {
+		BOOMR.utils.pluginConfig(impl, config, "DNS", ["base_url"]);
 
-            // do not run test over https
-            if (BOOMR.window.location.protocol === 'https:') {
-                impl.complete = true;
-                return dns;
-            }
+		if(!impl.base_url) {
+			BOOMR.warn("DNS.base_url is not set.  Cannot run DNS test.", "dns");
+			impl.complete = true;	// set to true so that is_complete doesn't
+						// block other plugins
+			return this;
+		}
 
-            BOOMR.subscribe("page_ready", impl.start, null, impl);
+		// do not run test over https
+		if(BOOMR.window.location.protocol === 'https:') {
+			impl.complete = true;
+			return this;
+		}
 
-            return dns;
-        },
+		BOOMR.subscribe("page_ready", impl.start, null, impl);
 
-        /**
-         * @return {boolean}
-         */
-        is_complete: function () {
-            return impl.complete;
-        }
-    };
+		return this;
+	},
 
-}
-dnsrun();
+	is_complete: function() {
+		return impl.complete;
+	}
+};
+
+}());
+
