@@ -423,7 +423,7 @@ function runrt(w) {
       return impl
     }
     subcookies = BOOMR.utils.getSubCookies(BOOMR.utils.getCookie(impl.cookie)) || {};
-    if(how === "ul") {
+    if(how === "ul" || how == "hd") {
       subcookies.r = d.URL.replace(/#.*/, "")
     }
     if(how === "cl") {
@@ -464,7 +464,7 @@ function runrt(w) {
     }
     subcookies["s"] = Math.max(+subcookies["ul"] || 0, +subcookies["cl"] || 0);
     BOOMR.debug("Read from cookie " + BOOMR.utils.objectToString(subcookies), "rt");
-    if(subcookies["s"] && subcookies["r"]) {
+    if(subcookies["s"] && (subcookies["r"] || subcookies["nu"])) {
       impl.r = subcookies["r"];
       BOOMR.debug(impl.r + " =?= " + impl.r2, "rt");
       BOOMR.debug(subcookies["s"] + " <? " + (+subcookies["cl"] + 15), "rt");
