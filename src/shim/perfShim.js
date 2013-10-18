@@ -11,24 +11,25 @@
 var perfOptions = window["perfOptions"];
 
 if (perfOptions) {
-    if (!perfOptions.pageStartTime) {
-        perfOptions.pageStartTime = new Date().getTime();
+    if (!perfOptions["pageStartTime"]) {
+        /**
+         * @type {!number}
+         * @const
+         */
+        perfOptions["pageStartTime"] = new Date().getTime();
     }
-    if (perfOptions.bURL) {
-        BOOMR.setBeaconUrl(perfOptions.bURL);
+    if (perfOptions["bURL"]) {
+        BOOMR.setBeaconUrl(perfOptions["bURL"]);
     }
 } else {
     perfOptions = {
+        /**
+         * @type {!number}
+         * @const
+         */
         pageStartTime: new Date().getTime()
     };
 }
-
-/**
- * @const
- * @private
- * @type {!string}
- */
-var BEACONURL = "";
 
 /**
  * @private
@@ -76,14 +77,14 @@ var Perf = /** @type {!IPerf} */ ({
      * @type {!window.typePerfLogLevel}
      * @private
      */
-    currentLogLevel: getLogLevel(perfOptions.logLevel),
+    currentLogLevel: getLogLevel(perfOptions["logLevel"]),
 
     /**
      * @type {!number}
      * @const
      * @expose
      */
-    startTime: perfOptions.pageStartTime,
+    startTime: perfOptions["pageStartTime"],
 
     /**
      * @param {!string} id The id used to identify the mark.

@@ -372,7 +372,7 @@ function run(w) {
     }
     return BOOMR
   }, setBeaconUrl:function(url) {
-    impl["beacon_url"] = url
+    impl.beacon_url = url
   }};
   if(typeof perfOptions["BOOMR_lstart"] === "number") {
     boomr.t_lstart = perfOptions["BOOMR_lstart"]
@@ -873,16 +873,15 @@ IPerf.prototype.utils;
 IPerf_util.prototype.setCookie;
 var perfOptions = window["perfOptions"];
 if(perfOptions) {
-  if(!perfOptions.pageStartTime) {
-    perfOptions.pageStartTime = (new Date).getTime()
+  if(!perfOptions["pageStartTime"]) {
+    perfOptions["pageStartTime"] = (new Date).getTime()
   }
-  if(perfOptions.bURL) {
-    BOOMR.setBeaconUrl(perfOptions.bURL)
+  if(perfOptions["bURL"]) {
+    BOOMR.setBeaconUrl(perfOptions["bURL"])
   }
 }else {
   perfOptions = {pageStartTime:(new Date).getTime()}
 }
-var BEACONURL = "";
 var _beaconData = null;
 function getLogLevel(logLevel) {
   if(typeof logLevel === "string") {
@@ -894,7 +893,7 @@ function updateTimerName(oldName, newName) {
   BOOMR.plugins.RT.updateTimer(oldName, newName);
   return Perf
 }
-var Perf = ({currentLogLevel:getLogLevel(perfOptions.logLevel), startTime:perfOptions.pageStartTime, mark:function(id, logLevel) {
+var Perf = ({currentLogLevel:getLogLevel(perfOptions["logLevel"]), startTime:perfOptions["pageStartTime"], mark:function(id, logLevel) {
   if(Perf.currentLogLevel.value <= getLogLevel(logLevel).value) {
     BOOMR.plugins.RT.startTimer(id)
   }

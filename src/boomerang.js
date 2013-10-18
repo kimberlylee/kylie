@@ -754,7 +754,7 @@ function run(w) {
          * @param {!string} url The URL to use for beaconing data
          */
         setBeaconUrl: function (url) {
-            impl["beacon_url"] = url;
+            impl.beacon_url = url;
         }
     };
 
