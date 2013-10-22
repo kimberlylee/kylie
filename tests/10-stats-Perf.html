@@ -11,7 +11,7 @@ window.onerror = function() {
 	st.style.backgroundColor="red";
 	st.innerHTML = "FAIL";
 }
-var perfOptions = {logLevel:"PerfLogLevel.INTERNAL", bURL:"/forcedotcom/boomerang", pageStartTime: (new Date).getTime()};
+var perfOptions = {logLevel:"INTERNAL", bURL:"/forcedotcom/boomerang", pageStartTime: (new Date).getTime()};
 </script>
 <script src="../perf.js"></script>
 <script>Perf.stat("IEEE RFC 1149.5", 4);</script>
