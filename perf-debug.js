@@ -839,7 +839,7 @@ function kylierun() {
 kylierun();
 BOOMR.init({log:null, wait:true, Kylie:{enabled:false}, autorun:false});
 BOOMR.t_end = (new Date).getTime();
-var PerfLogLevel = {DEBUG:{name:"DEBUG", value:1}, INTERNAL:{name:"INTERNAL", value:2}, PRODUCTION:{name:"PRODUCTION", value:3}};
+var PerfLogLevel = {DEBUG:{name:"DEBUG", value:1}, INTERNAL:{name:"INTERNAL", value:2}, PRODUCTION:{name:"PRODUCTION", value:3}, DISABLED:{name:"DISABLED", value:4}};
 var PerfConstants = {PAGE_START_MARK:"PageStart", PERF_PAYLOAD_PARAM:"bulkPerf", MARK_NAME:"mark", MEASURE_NAME:"measure", MARK_START_TIME:"st", MARK_LAST_TIME:"lt", PAGE_NAME:"pn", ELAPSED_TIME:"et", REFERENCE_TIME:"rt", Perf_LOAD_DONE:"loadDone"};
 PerfConstants.STATS = {NAME:"stat", SERVER_ELAPSED:"internal_serverelapsed", DB_TOTAL_TIME:"internal_serverdbtotaltime", DB_CALLS:"internal_serverdbcalls", DB_FETCHES:"internal_serverdbfetches"};
 window["PerfConstants"] = PerfConstants;
@@ -848,6 +848,7 @@ window.typePerfLogLevel;
 window.typejsonMeasure;
 function IPerf() {
 }
+IPerf.prototype.currentLogLevel;
 IPerf.prototype.mark;
 IPerf.prototype.endMark;
 IPerf.prototype.updateMarkName;

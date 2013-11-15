@@ -26,6 +26,11 @@ var PerfLogLevel = {
     PRODUCTION : {
         name : "PRODUCTION",
         value : 3
+    },
+    /** @expose */
+    DISABLED : {
+        name : "DISABLED",
+        value : 4
     }
 };
 

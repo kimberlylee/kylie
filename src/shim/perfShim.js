@@ -75,7 +75,8 @@ function updateTimerName(oldName, newName) {
 var Perf = /** @type {!IPerf} */ ({
     /**
      * @type {!window.typePerfLogLevel}
-     * @private
+     * @const
+     * @expose
      */
     currentLogLevel: getLogLevel(perfOptions["logLevel"]),
 

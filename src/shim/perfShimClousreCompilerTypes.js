@@ -21,6 +21,12 @@ window.typejsonMeasure;
 function IPerf() {}
 
 /**
+ * @type {!window.typePerfLogLevel}
+ * @const
+ */
+IPerf.prototype.currentLogLevel;
+
+/**
  * @param {!string} id The id used to identify the mark.
  * @param {string|window.typePerfLogLevel=} logLevel The level at which this mark should be logged at.
  * @return {!IPerf}

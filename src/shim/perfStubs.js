@@ -16,14 +16,13 @@ var ROOT_NAMESPACE = "Kylie";
  * @const
  */
 var Perf = window["Perf"] = window["Kylie"] = /** @type {!IPerf} */ ({
-    /**
-     * @param {?string} measureName Not used.
-     * @param {!string} id This is the id associated with the mark that uses the same id.
-     * @param {!Object=} logLevel The level at which this mark should be logged at.
-     * @deprecated Use endMark instead
-     * @expose
-     */
-    measure : function (measureName, id, logLevel) {},
+	
+	/**
+	 * @type {!window.typePerfLogLevel}
+	 * @expose
+	 * @const
+	 */
+	currentLogLevel : PerfLogLevel.DISABLED,
     /**
      * @param {!string} id The id used to identify the mark.
      * @param {window.typePerfLogLevel=} logLevel The level at which this mark should
