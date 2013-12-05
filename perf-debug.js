@@ -731,6 +731,7 @@ function runrt(w) {
     impl.timers = {};
     impl.complete = true;
     BOOMR.sendBeacon();
+    impl.onloadfired = true;
     return rt
   }, is_complete:function() {
     return impl.complete
@@ -978,7 +979,7 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions["logLevel"]), startTime:per
 }, endTransaction:function(tName) {
   BOOMR.plugins.RT.endTransaction(tName);
   return Perf
-}, updateTransaction:updateTimerName, onLoadFired:BOOMR.plugins.RT.onLoadFired, util:{setCookie:function(name, value, expires, path) {
+}, updateTransaction:updateTimerName, isOnLoadFired:BOOMR.plugins.RT.is_complete, util:{setCookie:function(name, value, expires, path) {
   document.cookie = name + "=" + escape(value + "") + (expires ? "; expires=" + expires.toGMTString() : "") + (path ? "; path=" + path : "; path=/")
 }}, enabled:true});
 var ROOT_NAMESPACE = "Kylie";

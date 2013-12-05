@@ -630,8 +630,9 @@ function runrt(w) {
             impl.complete = true;
 
             BOOMR.sendBeacon(); // we call sendBeacon() anyway because some
-            // other plugin
-            // may have blocked waiting for RT to complete
+                                // other plugin may have blocked waiting 
+                                // for RT to complete
+            impl.onloadfired = true;
             return rt;
         },
 

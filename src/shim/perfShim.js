@@ -369,7 +369,7 @@ var Perf = /** @type {!IPerf} */ ({
      * @return {!boolean}
      * @expose
      */
-    onLoadFired: BOOMR.plugins.RT.onLoadFired,
+    isOnLoadFired: BOOMR.plugins.RT.is_complete,
 
     /**
      * @namespace
