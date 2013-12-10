@@ -23,23 +23,45 @@ function runrt(w) {
     BOOMR = BOOMR || {};
     BOOMR.plugins = BOOMR.plugins || {};
 
-    // private object
+    /**
+     * @struct
+     * @private
+     */
     var impl = {
+        /** @type {!boolean} */
         initialized: false,    //! Set when init has completed to prevent double initialization
+        /** @type {!boolean} */
         onloadfired : false,
+        /** @type {!boolean} */
         visiblefired : false,
+        /** @type {!boolean} */
         complete : false, // ! Set when this plugin has completed
         timers : {}, // ! Custom timers that the developer can use
         // Format for each timer is { start: XXX, end: YYY, delta: YYY-XXX }
-        cookie : 'RT', // ! Name of the cookie that stores the start time and referrer
-        cookie_exp : 1800, // ! Cookie expiry in seconds
+        /**
+         * Name of the cookie that stores the start time and referrer
+         * @type {!string}
+         */
+        cookie : 'RT',
+        /**
+         * Cookie expiry in seconds
+         * @type {!number}
+         */
+        cookie_exp : 1800,
+        /** @type {!boolean} */
         strict_referrer : false, // ! By default, don't beacon if referrers don't match.
         // If set to false, beacon both referrer values and let
         // the back end decide
+        /** @type {number} */
         navigationType : 0,
+        /** @type {number|undefined} */
         navigationStart : undefined,
+        /** @type {number|undefined} */
         responseStart : undefined,
-        //2**32 -1
+        /**
+         * 2**32 -1
+         * @type {!string}
+         */
         sessionID : Math.floor(Math.random() * 4294967296).toString(36),
         /** @type {number|undefined} */
         sessionStart : undefined,
@@ -65,19 +87,19 @@ function runrt(w) {
             subcookies = BOOMR.utils.getSubCookies(BOOMR.utils.getCookie(impl.cookie)) || {};
             // We use document.URL instead of location.href because of a bug in safari 4
             // where location.href is URL decoded
-            if (how === "ul" || how == "hd") {
-                subcookies.r = d.URL.replace(/#.*/, '');
+            if (how === "ul" || how === "hd") {
+                subcookies["r"] = d.URL.replace(/#.*/, '');
             }
 
             if (how === "cl") {
                 if (url) {
-                    subcookies.nu = url;
-                } else if (subcookies.nu) {
-                    delete subcookies.nu;
+                    subcookies["nu"] = url;
+                } else if (subcookies["nu"]) {
+                    delete subcookies["nu"];
                 }
             }
             if (url === false) {
-                delete subcookies.nu;
+                delete subcookies["nu"];
             }
 
             t_start = new Date().getTime();
@@ -139,14 +161,16 @@ function runrt(w) {
                     impl.t_start = impl.t_fb_approx = undefined;
                 }
             }
-            if (subcookies.sid) {
-                impl.sessionID = subcookies.sid;
+            if (subcookies["sid"]) {
+                (/** @suppress {checkTypes} */ function() {
+                    impl.sessionID = subcookies["sid"];
+                })();
             }
-            if (subcookies.ss) {
-                impl.sessionStart = parseInt(subcookies.ss, 10);
+            if (subcookies["ss"]) {
+                impl.sessionStart = parseInt(subcookies["ss"], 10);
             }
-            if (subcookies.sl) {
-                impl.sessionLength = parseInt(subcookies.sl, 10);
+            if (subcookies["sl"]) {
+                impl.sessionLength = parseInt(subcookies["sl"], 10);
             }
         },
 
@@ -376,7 +400,7 @@ function runrt(w) {
          * Kylie Implementation
          * @param {string} timer_name
          * @param {!number} time_delta
-         * @param {!number=} time_start
+         * @param {!number} time_start
          * @return {!Object} for chaining methods
          */
         setTimer : function (timer_name, time_delta, time_start) {
@@ -536,7 +560,7 @@ function runrt(w) {
                 rt.endTimer('t_page');
             } else if (impl.t_fb_approx) {
                 rt.endTimer('t_resp', impl.t_fb_approx);
-                rt.setTimer("t_page", t_done - impl.t_fb_approx);
+                rt.setTimer("t_page", t_done - impl.t_fb_approx, impl.t_fb_approx);
             }
 
             // If a prerender timer was started, we can end it now as well

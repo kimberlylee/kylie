@@ -423,20 +423,20 @@ function runrt(w) {
       return impl
     }
     subcookies = BOOMR.utils.getSubCookies(BOOMR.utils.getCookie(impl.cookie)) || {};
-    if(how === "ul" || how == "hd") {
-      subcookies.r = d.URL.replace(/#.*/, "")
+    if(how === "ul" || how === "hd") {
+      subcookies["r"] = d.URL.replace(/#.*/, "")
     }
     if(how === "cl") {
       if(url) {
-        subcookies.nu = url
+        subcookies["nu"] = url
       }else {
-        if(subcookies.nu) {
-          delete subcookies.nu
+        if(subcookies["nu"]) {
+          delete subcookies["nu"]
         }
       }
     }
     if(url === false) {
-      delete subcookies.nu
+      delete subcookies["nu"]
     }
     t_start = (new Date).getTime();
     if(how) {
@@ -478,14 +478,16 @@ function runrt(w) {
         impl.t_start = impl.t_fb_approx = undefined
       }
     }
-    if(subcookies.sid) {
-      impl.sessionID = subcookies.sid
+    if(subcookies["sid"]) {
+      (function() {
+        impl.sessionID = subcookies["sid"]
+      })()
     }
-    if(subcookies.ss) {
-      impl.sessionStart = parseInt(subcookies.ss, 10)
+    if(subcookies["ss"]) {
+      impl.sessionStart = parseInt(subcookies["ss"], 10)
     }
-    if(subcookies.sl) {
-      impl.sessionLength = parseInt(subcookies.sl, 10)
+    if(subcookies["sl"]) {
+      impl.sessionLength = parseInt(subcookies["sl"], 10)
     }
   }, checkPreRender:function() {
     if(!(d["webkitVisibilityState"] && d["webkitVisibilityState"] === "prerender") && !(d["msVisibilityState"] && d["msVisibilityState"] === 3)) {
@@ -665,7 +667,7 @@ function runrt(w) {
       }else {
         if(impl.t_fb_approx) {
           rt.endTimer("t_resp", impl.t_fb_approx);
-          rt.setTimer("t_page", t_done - impl.t_fb_approx)
+          rt.setTimer("t_page", t_done - impl.t_fb_approx, impl.t_fb_approx)
         }
       }
     }
@@ -979,7 +981,7 @@ var Perf = ({currentLogLevel:getLogLevel(perfOptions["logLevel"]), startTime:per
 }, endTransaction:function(tName) {
   BOOMR.plugins.RT.endTransaction(tName);
   return Perf
-}, updateTransaction:updateTimerName, isOnLoadFired:BOOMR.plugins.RT.is_complete, util:{setCookie:function(name, value, expires, path) {
+}, updateTransaction:updateTimerName, isOnLoadFired:BOOMR.plugins.RT.isOnLoadFired, util:{setCookie:function(name, value, expires, path) {
   document.cookie = name + "=" + escape(value + "") + (expires ? "; expires=" + expires.toGMTString() : "") + (path ? "; path=" + path : "; path=/")
 }}, enabled:true});
 var ROOT_NAMESPACE = "Kylie";

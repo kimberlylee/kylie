@@ -15,7 +15,7 @@ var ROOT_NAMESPACE = "Kylie";
  * @type {!IPerf}
  * @const
  */
-var Perf = window["Perf"] = window["Kylie"] = /** @type {!IPerf} */ ({
+var Perf = window["Perf"] = window[ROOT_NAMESPACE] = /** @type {!IPerf} */ ({
 	
 	/**
 	 * @type {!window.typePerfLogLevel}
