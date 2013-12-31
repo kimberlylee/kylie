@@ -1,4 +1,4 @@
-(function(window){'use strict';/*
+(function(window){"use strict";/*
  Copyright (c) 2011, Yahoo! Inc.  All rights reserved.
  Copyright (c) 2012, Log-Normal, Inc.  All rights reserved.
  Copyright (c) 2013, SOASTA, Inc. All rights reserved.
@@ -37,6 +37,4 @@ var y={currentLogLevel:w(p.logLevel),startTime:p.pageStartTime,mark:function(c,f
 n.start?n.start:a,g.push(y.measureToJson(h)));c&&e.push("marks:{",b.join(","),"},");e.push("measures:[",g.join(","),"]}");return e.join("")},toPostVar:function(){return u.PERF_PAYLOAD_PARAM+"="+y.toJson().replace(/&/g,"__^__")},getMeasures:function(){l.plugins.b.N();var c=l.plugins.b.T(),f=l.plugins.b.R(),a=[],e=l.U(),b,g;for(b in e)"r"!=b&&"r2"!=b&&"t_other"!=b&&e.hasOwnProperty(b)&&!isNaN(e[b])&&(g={},g[u.MEASURE_NAME]=b,g[u.MARK_NAME]=b,g[u.ELAPSED_TIME]=e[b],g[u.REFERENCE_TIME]=c[b]?c[b].start:
 f,a.push(g));return a},getBeaconData:function(){return v},setBeaconData:function(c){v=c},clearBeaconData:function(){v=null},removeStats:l.removeStats,subscribe:l.subscribe,stat:function(c,f){l.d("st_"+c,f);return y},getStat:function(c){l.plugins.b.N();return c?l.ia(c):-1},onLoad:l.D,startTransaction:function(c){l.plugins.b.startTransaction(c);return y},endTransaction:function(c){l.plugins.b.endTransaction(c);return y},updateTransaction:x,isOnLoadFired:l.plugins.b.isOnLoadFired,util:{setCookie:function(c,
 f,a,e){document.cookie=c+"="+escape(f+"")+(a?"; expires="+a.toGMTString():"")+(e?"; path="+e:"; path=/")}},enabled:!0};window.Perf=y;window.Kylie=y;window.PerfLogLevel=r;window.PerfConstants=u;})(this);
-/*
-//@ sourceMappingURL=perf.js.map
-*/
+//# sourceMappingURL=perf.js.map

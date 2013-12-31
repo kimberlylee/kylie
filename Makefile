@@ -43,9 +43,7 @@ $(PROD_DIRECTORY)/perf.js: $(PROD_DIRECTORY)/perf-debug.js
 	echo "using shim: $(SHIM)..."
 	$(MINIFIER)src/boomerangClousreCompilerTypes.js src/plugins/pluginClousreCompilerTypes.js src/boomerang.js $(PLUGINS) $(SHIM) --js_output_file=$@
 	#Steps to connect the js file to the map file and handle some security
-	echo "/*" >> $@
-	echo "//@ sourceMappingURL=$(MAP_FILE_NAME)" >> $@
-	echo "*/" >> $@
+	echo "//# sourceMappingURL=$(MAP_FILE_NAME)" >> $@
 	echo ")]}" | cat - $(PROD_DIRECTORY)/$(MAP_FILE_NAME) > /tmp/$(MAP_FILE_NAME).tmp && mv /tmp/$(MAP_FILE_NAME).tmp $(PROD_DIRECTORY)/$(MAP_FILE_NAME)
 	echo "done"
 	echo
