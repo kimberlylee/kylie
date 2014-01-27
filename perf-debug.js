@@ -1,4 +1,4 @@
-this["Perf"]&&void 0===this["Perf"].enabled||(function(window){'use strict';function IBOOMR() {
+this.Perf&&void 0!==this.Perf.enabled||(function(window){'use strict';function IBOOMR() {
 }
 IBOOMR.prototype.version;
 IBOOMR.prototype.window;
