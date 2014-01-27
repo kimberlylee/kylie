@@ -63,10 +63,11 @@ function memoryrun() {
     /**
      * @struct
      * @const
+     * @type {!IPlugin}
      */
-    var memory = BOOMR.plugins.Memory =  /** @implements {IPlugin} */ {
+    var memory = BOOMR.plugins.Memory =  /** @lends {memory} */ {
         /**
-         * @return {!Object}
+         * @return {!IPlugin}
          */
         init: function () {
             // we do this on onload so that we take a memory and dom snapshot after most things have run

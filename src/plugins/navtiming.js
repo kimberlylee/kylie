@@ -99,10 +99,11 @@ function navtimingrun() {
     /**
      * @struct
      * @const
+     * @type {!IPlugin}
      */
-    var nt = BOOMR.plugins.NavigationTiming =  /** @implements {IPlugin} */ {
+    var nt = BOOMR.plugins.NavigationTiming =  /** @lends {nt} */ {
         /**
-         * @return {?Object}
+         * @return {!IPlugin}
          */
         init: function () {
             BOOMR.subscribe("page_ready", impl.done, null, impl);

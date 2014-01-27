@@ -156,11 +156,12 @@ function ipv6run() {
     /**
      * @struct
      * @const
+     * @type {!IPlugin}
      */
-    var ipv6 = BOOMR.plugins.IPv6 =  /** @implements {IPlugin} */ {
+    var ipv6 = BOOMR.plugins.IPv6 =  /** @lends {ipv6} */ {
         /**
-         * @param {Object.<string, ?>|null} config
-         * @return {?Object}
+         * @param {?Object.<string, ?>=} config
+         * @return {!IPlugin}
          */
         init: function (config) {
             BOOMR.utils.pluginConfig(impl, config, "IPv6", ["ipv6_url", "host_url", "timeout"]);

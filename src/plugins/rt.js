@@ -174,8 +174,6 @@ function runrt(w) {
             }
         },
 
-
-
         checkPreRender: function () {
             if (!(d["webkitVisibilityState"] && d["webkitVisibilityState"] === "prerender") && !(d["msVisibilityState"] && d["msVisibilityState"] === 3)) {
                 return false;
@@ -298,11 +296,12 @@ function runrt(w) {
     /**
      * @struct
      * @const
+     * @type {!IPlugin}
      */
-    var rt = BOOMR.plugins.RT = /** @implements {IPlugin} */ {
+    var rt = BOOMR.plugins.RT = /** @lends {rt} */ {
         /**
-         * @param {Object.<string, *>|null} config
-         * @return {!Object}
+         * @param {?Object.<string, *>=} config
+         * @return {!IPlugin}
          */
         init : function (config) {
 
@@ -312,8 +311,7 @@ function runrt(w) {
                 d = w.document;
             }
 
-            BOOMR.utils.pluginConfig(impl, config, "RT",
-                    ["cookie", "cookie_exp", "strict_referrer"]);
+            BOOMR.utils.pluginConfig(impl, config, "RT", ["cookie", "cookie_exp", "strict_referrer"]);
 
             impl.initFromCookie();
 
@@ -366,7 +364,7 @@ function runrt(w) {
 
         /**
          * @param {string} timer_name
-         * @param {number=} time_value
+         * @param {?number=} time_value
          */
         startTimer: function (timer_name, time_value) {
             if (timer_name) {
@@ -382,7 +380,7 @@ function runrt(w) {
 
         /**
          * @param {string} timer_name
-         * @param {number=} time_value
+         * @param {?number=} time_value
          */
         endTimer: function (timer_name, time_value) {
             if (timer_name) {

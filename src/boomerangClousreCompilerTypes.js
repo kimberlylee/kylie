@@ -9,7 +9,7 @@
 function IBOOMR() {}
 
 /**
- * @type {!String}
+ * @type {!string}
  */
 IBOOMR.prototype.version;
 
@@ -190,7 +190,7 @@ IBOOMR_utils.prototype.removeCookie;
  * Convenience method that plugins can call to configure themselves with the config object passed in to their init() method
  * 
  * @param {!Object} o The plugin's impl object within which it stores all its configuration and private properties
- * @param {Object.<string, ?>|null} config The config object passed in to the plugin's init() method
+ * @param {?Object.<string, ?>|undefined} config The config object passed in to the plugin's init() method
  * @param {!string} plugin_name The plugin's name in the BOOMR.plugins object
  * @param {Array.<string>} properties An array containing a list of all configurable properties that this plugin has
  */

@@ -9,13 +9,14 @@
  * @define {!string}
  * @private
  */
-var ROOT_NAMESPACE = "Kylie";
+var ROOT_NAMESPACE = "Perf";
 
 /**
- * @type {!IPerf}
+ * @namespace
  * @const
+ * @type {!IPerf}
  */
-var Perf = window["Perf"] = window[ROOT_NAMESPACE] = /** @type {!IPerf} */ ({
+var Perf = window[ROOT_NAMESPACE] = /** @lends {Perf} */ ({
 	
 	/**
 	 * @type {!window.typePerfLogLevel}
@@ -25,7 +26,7 @@ var Perf = window["Perf"] = window[ROOT_NAMESPACE] = /** @type {!IPerf} */ ({
 	currentLogLevel : PerfLogLevel.DISABLED,
     /**
      * @param {!string} id The id used to identify the mark.
-     * @param {window.typePerfLogLevel=} logLevel The level at which this mark should
+     * @param {string|window.typePerfLogLevel=} logLevel The level at which this mark should
      * be logged at.
      * @return {!IPerf}
      * @expose
@@ -34,7 +35,7 @@ var Perf = window["Perf"] = window[ROOT_NAMESPACE] = /** @type {!IPerf} */ ({
     /**
      * @param {!string} id This is the id associated with the mark that uses
      * the same id.
-     * @param {window.typePerfLogLevel=} logLevel The level at which this mark should
+     * @param {string|window.typePerfLogLevel=} logLevel The level at which this mark should
      * be logged at.
      * @return {!IPerf}
      * @expose
@@ -172,21 +173,22 @@ var Perf = window["Perf"] = window[ROOT_NAMESPACE] = /** @type {!IPerf} */ ({
     isOnLoadFired : function () { return false; },
     /**
      * @namespace
-     * @type {{setCookie: function (!string, !(number|string), Date, string)}}
+     * @type {!IPerf_util}
+     * @const
      * @expose
      */
-    util : {
+    util : /** @type {!IPerf_util} */ ({
         /**
          * Sets the roundtrip time cookie
          *
-         * @param {!string} name
-         * @param {!string|number} value
-         * @param {Date} expires
-         * @param {string} path
+         * @param {!string=} name
+         * @param {!string|number=} value
+         * @param {Date=} expires
+         * @param {string=} path
          * @expose
          */
         setCookie : function (name, value, expires, path) {}
-    },
+    }),
     /**
      * Whether the full Kylie framework is loaded, as opposed to just the stubs.
      * 

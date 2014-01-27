@@ -26,6 +26,7 @@ if (perfOptions) {
         /**
          * @type {!number}
          * @const
+         * @expose
          */
         pageStartTime: new Date().getTime()
     };
@@ -72,7 +73,7 @@ function updateTimerName(oldName, newName) {
  * @const
  * @type {!IPerf}
  */
-var Perf = /** @type {!IPerf} */ ({
+var Perf = /** @lends {Perf} */ ({
     /**
      * @type {!window.typePerfLogLevel}
      * @const
@@ -174,7 +175,7 @@ var Perf = /** @type {!IPerf} */ ({
         // this is a hack to include RT in the beacon - sorry this is the quickest fix I could come up with.
         var timers = BOOMR.plugins.RT.getTimers(),
             rt = BOOMR.plugins.RT.getSessionStart(),
-            json = ["{", 'sessionID:"', BOOMR.plugins.RT.getSessionID(), '",', "st:", rt, ",", 'pn:"', window.document.URL, '",', 'uid:"', Math.round(Math.random() * 1000000000000000), '",'],
+            json = ["{", 'sessionID:"', BOOMR.plugins.RT.getSessionID(), '",', "st:", rt, ",", 'pn:"', window.document.URL, '",', 'uid:"', Math.round(Math.random() * 1000000000000000).toString(), '",'],
             markJson = [],
             measureJson = [],
             k,
@@ -373,23 +374,24 @@ var Perf = /** @type {!IPerf} */ ({
 
     /**
      * @namespace
-     * @implements {IPerf_util}
+     * @type {!IPerf_util}
+     * @const
      * @expose
      */
-    util: {
+    util: /** @type {!IPerf_util} */ ({
         /**
          * Sets the roundtrip time cookie
          *
          * @param {!string} name
          * @param {!string|number} value
-         * @param {Date} expires
-         * @param {string} path
+         * @param {Date=} expires
+         * @param {string=} path
          * @expose
          */
         setCookie: function (name, value, expires, path) {
             document.cookie = name + "=" + escape(value + "") + ((expires) ? "; expires=" + expires.toGMTString() : "") + ((path) ? "; path=" + path : "; path=/");
         }
-    },
+    }),
 
     /**
      * Whether the full Kylie framework is loaded, as opposed to just the stubs.
@@ -405,9 +407,8 @@ var Perf = /** @type {!IPerf} */ ({
  * @define {!string}
  * @private
  */
-var ROOT_NAMESPACE = "Kylie";
+var ROOT_NAMESPACE = "Perf";
 
-window["Perf"] = Perf;
 window[ROOT_NAMESPACE] = Perf;
 window["PerfLogLevel"] = PerfLogLevel;
 window["PerfConstants"] = PerfConstants;

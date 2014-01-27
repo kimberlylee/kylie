@@ -55,13 +55,13 @@ function kylierun() {
     /**
      * @struct
      * @const
-     * @namespace
+     * @type {!IPlugin}
      */
-    var kylie = BOOMR.plugins.Kylie =  /** @implements {IPlugin} */ {
+    var kylie = BOOMR.plugins.Kylie =  /** @lends {kylie} */ {
         /**
-         * @return {?Object}
+         * @return {!IPlugin}
          */
-        init : function () {
+        init: function () {
 
             if (impl.complete) {
                 return kylie;
@@ -79,7 +79,7 @@ function kylierun() {
                     BOOMR.addVar('t_cfb', perfOptions["BOOMR_configt"] - impl.start_ts);
                     delete perfOptions["BOOMR_configt"];
                 }
-                return null;
+                return kylie;
             }
             impl.pass = true;
             // the config js is triggered to download async after page_ready

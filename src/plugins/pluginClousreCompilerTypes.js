@@ -15,7 +15,7 @@
 function IPlugin() {}
 
 /**
- * @param {Object.<string, *>|null} config
+ * @param {?Object.<string, *>=} config
  * @return {!IPlugin}
  */
 IPlugin.prototype.init;

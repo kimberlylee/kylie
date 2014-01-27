@@ -108,12 +108,11 @@ function bwrun() {
                 median,
                 std_dev,
                 std_err,
-                lat_filtered,
-                first;
+                lat_filtered;
 
             // We ignore the first since it paid the price of DNS lookup, TCP connect
             // and slow start
-            first = impl.latencies.shift();
+            impl.latencies.shift();
 
             // We first do IQR filtering and use the resulting data set
             // for all calculations
@@ -470,11 +469,12 @@ function bwrun() {
     /**
      * @struct
      * @const
+     * @type {!IPlugin}
      */
-    var bw = BOOMR.plugins.BW =  /** @implements {IPlugin} */ {
-        /**
-         * @param {Object.<string, ?>|null} config
-         * @return {!Object}
+    var bw = BOOMR.plugins.BW =  /** @lends {bw} */ {
+		/**
+         * @param {?Object.<string, *>=} config
+         * @return {!IPlugin}
          */
         init: function (config) {
             var cookies;
@@ -483,8 +483,7 @@ function bwrun() {
                 return bw;
             }
 
-            BOOMR.utils.pluginConfig(impl, config, "BW",
-                            ["base_url", "timeout", "nruns", "cookie", "cookie_exp"]);
+            BOOMR.utils.pluginConfig(impl, config, "BW", ["base_url", "timeout", "nruns", "cookie", "cookie_exp"]);
 
             if (config && config.user_ip) {
                 impl.user_ip = config.user_ip;

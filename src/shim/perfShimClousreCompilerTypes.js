@@ -173,7 +173,7 @@ IPerf.prototype.utils;
  *
  * @param {!string} name
  * @param {!string|number} value
- * @param {Date} expires
- * @param {string} path
+ * @param {Date=} expires
+ * @param {string=} path
  */
 IPerf_util.prototype.setCookie;

@@ -30,7 +30,13 @@ you, but we have a few ideas.
  */
 var BOOMR_start = new Date().getTime();
 
-/** @type {!IBOOMR} */
+/**
+ * Short namespace because I don't want to keep typing BOOMERANG
+ * 
+ * 
+ * @type {!IBOOMR}
+ * @namespace
+ */
 var BOOMR;
 
 /**
@@ -39,7 +45,7 @@ var BOOMR;
 var BEACON_URL = "";
 
 /**
- * @param {?Window} w
+ * @param {!Window} w
  * @private
  */
 function run(w) {
@@ -50,37 +56,16 @@ function run(w) {
     }
 
     /** 
-     * @type {!HTMLDocument}
+     * @type {!Document}
      * @const
      */
     var d = w.document;
-
-    /** @type {!string} */
-    var k;
 
     /**
      * @type {Object.<string, !(?)>}
      * @const
      */
     var perfOptions = w["perfOptions"] || {};
-
-    // Short namespace because I don't want to keep typing BOOMERANG
-    BOOMR = (w.BOOMR === undefined) ? {} : w.BOOMR;
-
-    // don't allow this code to be included twice
-    if (BOOMR.version) {
-        return;
-    }
-
-    /**
-     * @type {!string}
-     * @const
-     */
-    BOOMR.version = "0.9";
-    /**
-     * @type {?Window}
-     */
-    BOOMR.window = w;
 
     /**
      * impl is a private object not reachable from outside the BOOMR object
@@ -167,15 +152,17 @@ function run(w) {
             } else if (ev.srcElement) {
                 target = ev.srcElement;
             }
-            if (target.nodeType === 3) {// defeat Safari bug
-                target = target.parentNode;
-            }
 
             // don't capture clicks on flash objects
             // because of context slowdowns in PepperFlash
-            if (target && target.nodeName.toUpperCase() === "OBJECT" && target.type === "application/x-shockwave-flash") {
+            if (!target || (target.nodeName.toUpperCase() === "OBJECT" && target.type === "application/x-shockwave-flash")) {
                 return;
             }
+            
+            if (target.nodeType === 3) {// defeat Safari bug
+                target = target.parentNode;
+            }
+            
             impl.fireEvent("click", target);
         },
 
@@ -210,8 +197,9 @@ function run(w) {
      * 
      * @private
      * @const
+     * @type {!IBOOMR}
      */
-    var boomr = /** @implements {IBOOMR} */ {
+    var boomr = /** @lends {boomr} */ {
         /**
          * @type {number|undefined}
          */
@@ -224,6 +212,20 @@ function run(w) {
          * @type {?number}
          */
         t_end: null,
+        
+        /** @type {Object.<!string, !IPlugin>} */
+        plugins: {},
+        
+        /**
+         * @type {!string}
+         * @const
+         */
+        version: "0.9",
+        
+        /**
+         * @type {?Window}
+         */
+        window: w,
 
         /**
          * Utility functions
@@ -293,7 +295,7 @@ function run(w) {
                     return false;
                 }
 
-                value = BOOMR.utils.objectToString(subcookies, "&");
+                value = boomr.utils.objectToString(subcookies, "&");
                 nameval = name + "=" + value;
 
                 c = [nameval, "path=/", "domain=" + impl.site_domain];
@@ -307,7 +309,7 @@ function run(w) {
                 if (nameval.length < 4000) {
                     d.cookie = c.join("; ");
                     // confirm cookie was set (could be blocked by user's settings, etc.)
-                    return (value === BOOMR.utils.getCookie(name));
+                    return (value === boomr.utils.getCookie(name));
                 }
 
                 return false;
@@ -352,14 +354,14 @@ function run(w) {
              * @return {boolean} 
              */
             removeCookie: function (name) {
-                return BOOMR.utils.setCookie(name, {}, 0);
+                return boomr.utils.setCookie(name, {}, 0);
             },
 
             /**
              * Convenience method that plugins can call to configure themselves with the config object passed in to their init() method
              * 
              * @param {!Object} o The plugin's impl object within which it stores all its configuration and private properties
-             * @param {Object.<string, ?>|null} config The config object passed in to the plugin's init() method
+             * @param {?Object.<string, ?>|undefined} config The config object passed in to the plugin's init() method
              * @param {!string} plugin_name The plugin's name in the BOOMR.plugins object
              * @param {Array.<string>} properties An array containing a list of all configurable properties that this plugin has
              */
@@ -393,21 +395,6 @@ function run(w) {
                     el.attachEvent("on" + type, fn);
                 }
             }
-//            ,
-//
-//            /**
-//             * @param {!Window|EventTarget} el
-//             * @param {!string} type
-//             * @param {function(?Event)} fn
-//             * @private
-//             */
-//            removeListener: function (el, type, fn) {
-//                if (el.removeEventListener) {
-//                    el.removeEventListener(type, fn, false);
-//                } else {
-//                    el.detachEvent("on" + type, fn);
-//                }
-//            }
         },
 
         /**
@@ -418,7 +405,7 @@ function run(w) {
          */
         init: function (config) {
             var i,
-                l,
+                l = null,
                 properties = ["beacon_url", "site_domain", "user_ip"];
 
             if (!config) {
@@ -432,14 +419,14 @@ function run(w) {
             }
 
             if (config.log !== undefined) {
-                BOOMR.log = config.log;
+                boomr.log = config.log;
             }
-            if (!BOOMR.log) {
-                BOOMR.log = function (m, l, s) { };
+            if (!boomr.log) {
+                boomr.log = function (/*m, l, s*/) { };
             }
 
-            for (l in BOOMR.plugins) {
-                if (BOOMR.plugins.hasOwnProperty(l)) {
+            for (l in boomr.plugins) {
+                if (boomr.plugins.hasOwnProperty(l)) {
                     // config[pugin].enabled has been set to false
                     if (config[l] && config[l].hasOwnProperty("enabled") && config[l].enabled === false) {
                         impl.disabled_plugins[l] = 1;
@@ -450,25 +437,25 @@ function run(w) {
                     }
 
                     // plugin exists and has an init method
-                    if (typeof BOOMR.plugins[l].init === "function") {
-                        BOOMR.plugins[l].init(config);
+                    if (typeof boomr.plugins[l].init === "function") {
+                        boomr.plugins[l].init(config);
                     }
                 }
             }
 
             if (impl.handlers_attached) {
-                return BOOMR;
+                return boomr;
             }
 
             // The developer can override onload by setting autorun to false
             if (!impl.onloadfired && (config.autorun === undefined || config.autorun !== false)) {
                 if (d.readyState && d.readyState === "complete") {
-                    BOOMR.setImmediate(BOOMR.page_ready, null, null, BOOMR);
+                    boomr.setImmediate(boomr.page_ready, null, null, boomr);
                 } else {
                     if (w["onpagehide"] || w["onpagehide"] === null) {
-                        boomr.utils.addListener(w, "pageshow", BOOMR.page_ready);
+                        boomr.utils.addListener(w, "pageshow", boomr.page_ready);
                     } else {
-                        boomr.utils.addListener(w, "load", BOOMR.page_ready);
+                        boomr.utils.addListener(w, "load", boomr.page_ready);
                     }
                 }
             }
@@ -497,13 +484,13 @@ function run(w) {
                     // those that do are new enough to not have memory leak problems of
                     // some older browsers
                     boomr.utils.addListener(w, "unload", function () {
-                        BOOMR.window = w = null;
+                        delete boomr.window;
                     });
                 }
             }());
 
             impl.handlers_attached = true;
-            return BOOMR;
+            return boomr;
         },
 
         /**
@@ -514,11 +501,11 @@ function run(w) {
          */
         page_ready: function () {
             if (impl.onloadfired) {
-                return BOOMR;
+                return boomr;
             }
             impl.fireEvent("page_ready");
             impl.onloadfired = true;
-            return BOOMR;
+            return boomr;
         },
 
         /**
@@ -560,7 +547,7 @@ function run(w) {
             var i, h, e, unload_handler;
 
             if (!impl.events.hasOwnProperty(e_name)) {
-                return BOOMR;
+                return boomr;
             }
 
             e = impl.events[e_name];
@@ -569,14 +556,14 @@ function run(w) {
             for (i = 0; i < e.length; i++) {
                 h = e[i];
                 if (h[0] === fn && h[1] === cb_data && h[2] === cb_scope) {
-                    return BOOMR;
+                    return boomr;
                 }
             }
             e.push([ fn, cb_data || {}, cb_scope || null ]);
 
             // attaching to page_ready after onload fires, so call soon
             if (e_name === "page_ready" && impl.onloadfired) {
-                BOOMR.setImmediate(fn, null, cb_data, cb_scope);
+                boomr.setImmediate(fn, null, cb_data, cb_scope);
             }
 
             // Attach unload handlers directly to the window.onunload and
@@ -601,7 +588,7 @@ function run(w) {
                 boomr.utils.addListener(w, "beforeunload", unload_handler);
             }
 
-            return BOOMR;
+            return boomr;
         },
 
         /**
@@ -621,7 +608,7 @@ function run(w) {
                     }
                 }
             }
-            return BOOMR;
+            return boomr;
         },
 
         /**
@@ -631,7 +618,7 @@ function run(w) {
         removeVar: function (arg0) {
             var i, params;
             if (!arguments.length) {
-                return BOOMR;
+                return boomr;
             }
 
             if (arguments.length === 1 && Object.prototype.toString.apply(arg0) === "[object Array]") {
@@ -646,7 +633,7 @@ function run(w) {
                 }
             }
 
-            return BOOMR;
+            return boomr;
         },
 
         /**
@@ -664,7 +651,7 @@ function run(w) {
          * This method return a particular timer
          *
          * @param {!string} name
-         * @return {?(Object|boolean|number|string|undefined)}
+         * @return {!string|number}
          */
         getVar: function (name) {
             return impl.vars[name];
@@ -678,8 +665,8 @@ function run(w) {
          */
         removeStats: function () {
             impl.vars = {};
-            BOOMR.plugins.RT.clearTimers();
-            return BOOMR;
+            boomr.plugins.RT.clearTimers();
+            return boomr;
         },
 
         /**
@@ -694,18 +681,18 @@ function run(w) {
             // At this point someone is ready to send the beacon.  We send
             // the beacon only if all plugins have finished doing what they
             // wanted to do
-            for (l in BOOMR.plugins) {
-                if (BOOMR.plugins.hasOwnProperty(l)) {
+            for (l in boomr.plugins) {
+                if (boomr.plugins.hasOwnProperty(l)) {
                     if (impl.disabled_plugins[l]) {
                         continue;
                     }
-                    if (!BOOMR.plugins[l].is_complete()) {
-                        return BOOMR;
+                    if (!boomr.plugins[l].is_complete()) {
+                        return boomr;
                     }
                 }
             }
 
-            impl.vars["v"] = BOOMR.version;
+            impl.vars["v"] = boomr.version;
             impl.vars["u"] = d.URL.replace(/#.*/, "");
             // use d.URL instead of location.href because of a safari bug
             if (w !== window) {
@@ -719,7 +706,7 @@ function run(w) {
             // you would do this if you want to do some fancy beacon handling
             // in the `before_beacon` event instead of a simple GET request
             if (!impl.beacon_url) {
-                return BOOMR;
+                return boomr;
             }
 
             // if there are already url parameters in the beacon url,
@@ -736,7 +723,7 @@ function run(w) {
 
             url = impl.beacon_url + ((impl.beacon_url.indexOf("?") > -1) ? "&" : "?") + url.join("&");
 
-            BOOMR.debug("Sending url: " + url.replace(/&/g, "\n\t"));
+            boomr.debug("Sending url: " + url.replace(/&/g, "\n\t"));
 
             // only send beacon if we actually have something to beacon back
             if (nparams) {
@@ -744,7 +731,7 @@ function run(w) {
                 img.src = url;
             }
 
-            return BOOMR;
+            return boomr;
         },
 
         /**
@@ -778,8 +765,8 @@ function run(w) {
              * @return {!IBOOMR}
              */
             return function (m, s) {
-                BOOMR.log(m, l, "boomerang" + (s ? "." + s : ""));
-                return BOOMR;
+                boomr.log(m, l, "boomerang" + (s ? "." + s : ""));
+                return boomr;
             };
         }
 
@@ -817,15 +804,7 @@ function run(w) {
         boomr.log = function (m, l, s) { w.console.log(s + ": [" + l + "] " + m); };
     }
 
-    for (k in boomr) {
-        if (boomr.hasOwnProperty(k)) {
-            BOOMR[k] = boomr[k];
-        }
-    }
-
-    /** @type {Object.<!string, !IPlugin>} */
-    BOOMR.plugins = BOOMR.plugins || {};
-
+    BOOMR = boomr;
 }
 run(window);
 

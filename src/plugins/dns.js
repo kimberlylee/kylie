@@ -85,11 +85,12 @@ function dnsrun() {
     /**
      * @struct
      * @const
+     * @type {!IPlugin}
      */
-    var dns = BOOMR.plugins.DNS =  /** @implements {IPlugin} */ {
+    var dns = BOOMR.plugins.DNS =  /** @lends {dns} */ {
         /**
-         * @param {Object.<string, ?>|null} config
-         * @return {!Object}
+         * @param {?Object.<string, ?>=} config
+         * @return {!IPlugin}
          */
         init: function (config) {
             BOOMR.utils.pluginConfig(impl, config, "DNS", ["base_url"]);
@@ -119,6 +120,5 @@ function dnsrun() {
             return impl.complete;
         }
     };
-
 }
 dnsrun();
