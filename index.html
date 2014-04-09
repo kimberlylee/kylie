@@ -1,0 +1,17 @@
+<html>
+	<head>
+		<title>Crap</title>
+	</head>
+	<body>
+		<script src="/Users/kimberly.lee/kylie/bowser.min.js"></script>
+		<script>
+			// Need to add that user timing API is also supported by IE 10+, Opera 20+, 
+			// and Android 4.4
+			var isUserTimingAPISupported  = (bowser.chrome && bowser.version >= 25);
+			if ( isUserTimingAPISupported ) {
+				alert("blah");
+			}
+		</script>
+		Hello World
+	</body>
+</html>
