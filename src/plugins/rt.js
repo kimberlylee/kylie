@@ -371,7 +371,11 @@ function runrt(w) {
                 if (timer_name === 't_page') {
                     rt.endTimer('t_resp', time_value);
                 }
-                impl.timers[timer_name] = {start: (typeof time_value === "number" ? time_value : new Date().getTime())};
+            	if(window["performance"] && window["performance"]["mark"] && !time_value) {
+        			window["performance"]["mark"](timer_name);
+            	} else {
+            		impl.timers[timer_name] = {start: (typeof time_value === "number" ? time_value : new Date().getTime())};
+            	}
                 impl.complete = false;
             }
 
@@ -384,11 +388,16 @@ function runrt(w) {
          */
         endTimer: function (timer_name, time_value) {
             if (timer_name) {
-                impl.timers[timer_name] = impl.timers[timer_name] || {};
-                if (impl.timers[timer_name].end === undefined) {
-                    impl.timers[timer_name].end =
-                        (typeof time_value === "number" ? time_value : new Date().getTime());
-                }
+            	impl.timers[timer_name] = impl.timers[timer_name] || {};
+            	
+            	if(window["performance"] && window["performance"]["mark"] && !time_value) {
+        			window["performance"]["measure"](timer_name);
+            	} else {
+	                if (impl.timers[timer_name].end === undefined) {
+	                	impl.timers[timer_name].end =
+	                        (typeof time_value === "number" ? time_value : new Date().getTime());
+	                }
+            	}
             }
 
             return rt;
@@ -439,6 +448,9 @@ function runrt(w) {
         updateVars : function () {
             if (impl.timers) {
                 var timer, t_name;
+                for (t_name in window["performance"]["getEntriesByType"]('mark')) {
+                	
+                }
                 for (t_name in impl.timers) {
                     if (impl.timers.hasOwnProperty(t_name)) {
                         timer = impl.timers[t_name];
@@ -471,7 +483,7 @@ function runrt(w) {
          * @return {!Object} for chaining methods
          */
         startTransaction : function (tName) {
-            return BOOMR.plugins.RT.startTimer('txn_' + tName, new Date().getTime());
+            return BOOMR.plugins.RT.startTimer('txn_' + tName);
         },
 
         /**
@@ -481,7 +493,7 @@ function runrt(w) {
          * @return {!Object} for chaining methods
          */
         endTransaction : function (tName) {
-            return BOOMR.plugins.RT.endTimer('txn_' + tName, new Date().getTime());
+            return BOOMR.plugins.RT.endTimer('txn_' + tName);
         },
 
         /**
@@ -629,6 +641,8 @@ function runrt(w) {
                     ntimers++;
                 }
             }
+            
+            for (t_name in impl.timers)
 
             if (ntimers) {
                 BOOMR.addVar("r", impl.r);
@@ -650,6 +664,8 @@ function runrt(w) {
 
             impl.timers = {};
             impl.complete = true;
+            
+            //TODO: All data needs to be sent prior to sendBeacon()
 
             BOOMR.sendBeacon(); // we call sendBeacon() anyway because some
                                 // other plugin may have blocked waiting 

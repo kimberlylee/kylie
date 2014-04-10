@@ -16,19 +16,19 @@ if (perfOptions) {
          * @type {!number}
          * @const
          */
-        perfOptions["pageStartTime"] = new Date().getTime();
+		perfOptions["pageStartTime"] = new Date().getTime();
     }
     if (perfOptions["bURL"]) {
         BOOMR.setBeaconUrl(perfOptions["bURL"]);
     }
 } else {
     perfOptions = {
-        /**
-         * @type {!number}
-         * @const
-         * @expose
-         */
-        pageStartTime: new Date().getTime()
+            /**
+             * @type {!number}
+             * @const
+             * @expose
+             */
+            pageStartTime: new Date().getTime()
     };
 }
 
@@ -66,6 +66,7 @@ function updateTimerName(oldName, newName) {
     return Perf;
 }
 
+
 /**
  * This is the shim object to support the existing mark and measure functionality
  *
@@ -99,7 +100,8 @@ var Perf = /** @lends {Perf} */ ({
         // don't log things that are less important than the current logging
         // level
         if (Perf.currentLogLevel.value <= getLogLevel(logLevel).value) {
-            BOOMR.plugins.RT.startTimer(id);
+        	BOOMR.plugins.RT.startTimer(id);
+            
         }
         return Perf;
     },

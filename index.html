@@ -1,17 +1,13 @@
 <html>
 	<head>
 		<title>Crap</title>
+		<script src="/home/kimberly.lee//kylie/prod--1397080992/perf-debug.js"></script>
 	</head>
-	<body>
-		<script src="/Users/kimberly.lee/kylie/bowser.min.js"></script>
+	<body onload="Perf.onLoad()">
 		<script>
-			// Need to add that user timing API is also supported by IE 10+, Opera 20+, 
-			// and Android 4.4
-			var isUserTimingAPISupported  = (bowser.chrome && bowser.version >= 25);
-			if ( isUserTimingAPISupported ) {
-				alert("blah");
-			}
+			Perf.mark("Twain");
+			console.log("Number of DOM elements: " + document.getElementsByTagName("*").length);
+			Perf.endMark("Twain");
 		</script>
-		Hello World
 	</body>
 </html>
