@@ -185,6 +185,8 @@ var Perf = /** @lends {Perf} */ ({
             vars = BOOMR.getVars(),
             timer;
 
+        // TODO: Need to traverse through the one for User Timing API
+        
         for (k in vars) {
             if ((k != "r") && (k != "r2") && (k != "t_other")) {
                 if (vars.hasOwnProperty(k) && !isNaN(vars[k])) {

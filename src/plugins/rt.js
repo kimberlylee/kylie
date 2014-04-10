@@ -616,6 +616,8 @@ function runrt(w) {
                     }
                 }
             }
+            
+            //TODO: Need to traverse through User Timings API to get the more accurate number too YIPPY!
 
             for (t_name in impl.timers) {
                 if (impl.timers.hasOwnProperty(t_name)) {
